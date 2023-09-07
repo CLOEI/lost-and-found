@@ -2,8 +2,9 @@
 This is a school project. the point is to create a website where people can post lost and found items. The website is made with Flask.
 ## Development
 1. Install python 3
-2. Run venv script suitable to your os (Explanation below)
-3. Run `pip install -r requirements.txt`
+2. setup a virtual environment with `python -m venv venv`
+3. Run venv scripts suitable for your OS (see below)
+4. Install dependencies with `pip install -r requirements.txt`
 ## Commit format
 1. When you add a feature, write feat/feature-name
 2. When you fix a bug, write fix/bug-name
@@ -17,12 +18,10 @@ This is a school project. the point is to create a website where people can post
 2. Run `venv\Scripts\activate.bat`
 ### Linux
 1. Open terminal
-2. Run `source venv/bin/activate`
+2. Run `source venv/Scripts/activate`
 ### Mac
 1. Open terminal
-2. Run `source venv/bin/activate`
-
+2. Run `source venv/Scripts/activate`
 ## How to run the website
-```bash
-flask run
-```
+To run the app, use the `flask run` command.
+The app will be available at http://localhost:5000
