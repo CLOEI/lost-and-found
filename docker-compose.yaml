@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    container_name: lost-and-found
+    command: ["flask", "run", "--host=0.0.0.0", "--debug"]
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app

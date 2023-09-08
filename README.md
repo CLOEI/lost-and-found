@@ -1,5 +1,7 @@
 # Lost and Found
 This is a school project. the point is to create a website where people can post lost and found items. The website is made with Flask.
+## Figma design
+Click here to see the [design](https://www.figma.com/file/sxUL9oMPOYe11dPEOORgiB/Lost-and-found?type=design&node-id=0%3A1&mode=design&t=Bn8C9JIcW0TrOEYw-1)
 ## Development
 1. Install python 3
 2. setup a virtual environment with `python -m venv venv`
