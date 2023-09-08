@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-  <title>Lost & Found</title>
-</head>
-<body>
-  <h1>Currently Under Development</h1>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/index.css') }}"
+        />
+        <title>Lost & Found | Home</title>
+    </head>
+    <body>
+        <div class="responsive">
+            <h1 class="title">Lost &<br />Found</h1>
+            <div
+                class="flex-container flex-responsive-direction f-justify-around"
+                style="min-height: 10em"
+            >
+                <div class="flex-container flex-row f-justify-around lost">
+                    <h3>I lost something</h3>
+                    <a class="button" id="lost">Create report</a>
+                </div>
+                <div class="flex-container flex-row f-justify-around found">
+                    <h3>I found something</h3>
+                    <a class="button" id="found">Create report</a>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
