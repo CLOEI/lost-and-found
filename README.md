@@ -41,5 +41,4 @@ Click here to see the [design](https://www.figma.com/file/sxUL9oMPOYe11dPEOORgiB
 
 ## How to run the website
 
-To run the app, use the `flask --app ./api/app.py run` command (or `flask --app ./api/app.py --debug run` for hot reload)
-The app will be available at http://localhost:5000
+To run the app, use the `flask --app ./api/app.py run` command (or `flask --app ./api/app.py --debug run` for hot reload). The app will be available at http://localhost:5000
