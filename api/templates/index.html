@@ -13,16 +13,20 @@
         <div class="responsive">
             <h1 class="title">Lost &<br />Found</h1>
             <div
-                class="flex-container flex-responsive-direction f-justify-around"
+                class="flex-container flex-row flex-nowrap f-justify-around section-container"
                 style="min-height: 10em"
             >
-                <div class="flex-container flex-row f-justify-around lost">
-                    <h3>I lost something</h3>
-                    <a class="button" id="lost">Create report</a>
+                <div
+                    class="flex-container flex-row f-justify-around f-align-center lost section"
+                >
+                    <h3 class="sectiontitle">I've lost something!</h3>
+                    <a class="button" id="report_lost">Create report</a>
                 </div>
-                <div class="flex-container flex-row f-justify-around found">
-                    <h3>I found something</h3>
-                    <a class="button" id="found">Create report</a>
+                <div
+                    class="flex-container flex-row-rev f-justify-around f-align-center found section"
+                >
+                    <h3 class="sectiontitle">I found something!</h3>
+                    <a class="button" id="browse_lost">Find its owner</a>
                 </div>
             </div>
         </div>

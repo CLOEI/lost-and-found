@@ -9,6 +9,7 @@
     padding: 0;
     line-height: 1.25em;
     text-decoration: none;
+    cursor: default;
 }
 
 body {
@@ -34,16 +35,19 @@ a {
     font-family: 'Sarabun', sans-serif;
 }
 
-.responsive {
-    width: max(65vw, 65ch);
-    margin: 0 auto;
-}
-
 /* presudo-tailwind cuz it's so much nicer than css */
 
 .flex-container {
     display: flex;
     flex: 1 1 auto;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-nowrap {
+    flex-wrap: nowrap;
 }
 
 .flex-responsive-direction {
@@ -54,12 +58,24 @@ a {
     flex-direction: row;
 }
 
+.flex-row-rev {
+    flex-direction: row-reverse;
+}
+
 .flex-col {
     flex-direction: column;
 }
 
 .f-justify-around {
     justify-content: space-around;
+}
+
+.f-justify-between {
+    justify-content: space-between;
+}
+
+.f-align-center {
+    align-items: center;
 }
 
 /* special styles for specific elements */
@@ -70,6 +86,11 @@ a {
     margin-top: 0.25em;
 }
 
+.sectiontitle {
+    height: 1.25em;
+    padding: 0.25em;
+}
+
 .button {
     background: lightgrey;
     border-radius: 0.2em;
@@ -77,14 +98,50 @@ a {
     width: fit-content;
     padding: 0.25em;
     font-size: 1.5em;
-    transition: background 1s linear;
+    transition: background 0.25s linear;
+    color: #0f0f0f;
+    cursor: pointer;
 }
 
 .button:hover {
     background: darkgrey;
 }
 
-/* mobile version */
+.section-container {
+    max-width: 100%;
+}
+
+.section {
+    background-color: #0f0f0f;
+    width: 50%;
+    transition: background-color 0.25s linear 0.25s,
+        width 0.25s ease-in-out 0.25s;
+    padding: 0.15em;
+    z-index: 0;
+}
+
+.section .button {
+    opacity: 0;
+    transition: opacity 0.25s linear 0s;
+}
+
+.section:hover {
+    background-color: white;
+    width: 100%;
+    z-index: 1;
+}
+
+.section:hover .button {
+    opacity: 1;
+    transition: opacity 0.25s linear 0.5s;
+}
+
+/* responsive layout */
+
+.responsive {
+    width: max(65vw, 65ch); /* 65vw for mobile, 65ch for desktop */
+    margin: 0 auto; /* keep content centered */
+}
 
 @media screen and (orientation: portrait) {
     body {
