@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from firebase_admin._auth_utils import EmailAlreadyExistsError
 from werkzeug.exceptions import BadRequestKeyError
-from Firebase import Firebase
+from .Firebase import Firebase
 from dotenv import load_dotenv
 from functools import wraps
 
