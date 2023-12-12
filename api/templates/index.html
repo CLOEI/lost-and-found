@@ -1,38 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            rel="stylesheet"
-            href="{{ url_for('static', filename='css/index.css') }}"
-        />
-        <title>Lost & Found | Home</title>
-    </head>
-    <body>
-        <div class="responsive">
-            <h1 class="title">Lost &<br />Found</h1>
-            <div
-                class="flex-container flex-row flex-nowrap f-justify-around section-container"
-                style="min-height: 10em"
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/reset.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/index.css') }}"
+    />
+    <title>Lost & Found</title>
+  </head>
+  <body>
+    <div class="responsive">
+      <div class="flex-container flex-nowrap flex-col f-justify-center h-full">
+        <h1 class="title">Lost &<br />Found</h1>
+        <div
+          class="flex-container flex-col flex-nowrap flex-nogrow f-justify-center section-container"
+        >
+          <div
+            class="flex-container flex-row f-justify-around f-align-center lost section"
+          >
+            <h3 class="sectiontitle" style="text-align: left">
+              I've lost something!
+            </h3>
+            <a
+              class="button"
+              id="report_lost"
+              href="report"
+              style="text-align: center"
             >
-                <div
-                    class="flex-container flex-row f-justify-around f-align-center lost section"
-                >
-                    <h3 class="sectiontitle">I've lost something!</h3>
-                    <a class="button" id="report_lost" href="report"
-                        >Create report</a
-                    >
-                </div>
-                <div
-                    class="flex-container flex-row-rev f-justify-around f-align-center found section"
-                >
-                    <h3 class="sectiontitle">I found something!</h3>
-                    <a class="button" id="browse_lost" href="lost_items"
-                        >Find its owner</a
-                    >
-                </div>
-            </div>
+              Create report
+            </a>
+          </div>
+          <div
+            class="flex-container flex-row-rev f-justify-around f-align-center found section"
+          >
+            <h3 class="sectiontitle" style="text-align: right">
+              I found something!
+            </h3>
+            <a
+              class="button"
+              id="browse_lost"
+              href="lost_items"
+              style="text-align: center"
+            >
+              Find its owner
+            </a>
+          </div>
         </div>
-    </body>
+      </div>
+    </div>
+  </body>
 </html>

@@ -35,11 +35,11 @@ def register():
             resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': token })
             resp.set_cookie('token', token)
         except BadRequestKeyError:
-            return { 'status': 'ERROR', 'message': 'All fields are required!' }, 400
-        except ValueError as e:
-            return { 'status': 'ERROR', 'message': str(e) }, 400
+            return render_template("register.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except EmailAlreadyExistsError:
-            return { 'status': 'ERROR', 'message': 'Email already exists!' }, 400
+            return render_template("register.html", response = { 'status': 'ERROR', 'message': 'Email already exists!' }), 400
+        except ValueError as e:
+            return render_template("register.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
     elif request.method == 'GET':
         return render_template("register.html")
 

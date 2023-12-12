@@ -3,10 +3,21 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Lost & Found | Lost Items Database</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/index.css') }}"
+        />
+        <title>Items | Lost & Found</title>
     </head>
     <body>
-        <h1>items</h1>
-        <a href="/">homepage</a>
+        <div class="responsive">
+            <h1 class="title">Lost &<br />Found</h1>
+            <div
+                class="flex-container flex-row flex-nowrap f-justify-around section-container"
+                style="min-height: 10em"
+            >
+                <h3 class="sectiontitle">items list</h3>
+            </div>
+        </div>
     </body>
 </html>
