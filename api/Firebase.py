@@ -1,6 +1,10 @@
 from firebase_admin import auth, initialize_app, credentials
 from os import getenv
 
+
+def cleanup_key(key):
+  return key.replace('\\n', '\n') if key else ''
+
 class Firebase:
   app = None
   def __init__(self):
@@ -8,7 +12,7 @@ class Firebase:
       'type': getenv('type'),
       'project_id': getenv('project_id'),
       'private_key_id': getenv('private_key_id'),
-      'private_key': getenv('private_key').replace('\\n', '\n'),
+      'private_key': cleanup_key(getenv('private_key')),
       'client_email': getenv('client_email'),
       'client_id': getenv('client_id'),
       'auth_uri': getenv('auth_uri'),
