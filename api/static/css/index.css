@@ -1,6 +1,8 @@
 /* font import */
 @import url("https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Tilt+Warp&display=swap");
+
 /* variables */
+
 /* global styles */
 * {
   margin: 0;
@@ -19,6 +21,11 @@ body h1 {
   font-family: "Tilt Warp", sans-serif;
   font-size: 5em;
 }
+body h2 {
+  color: #acacac;
+  font-family: "Tilt Warp", sans-serif;
+  font-size: 2em;
+}
 body h3 {
   color: #acacac;
   font-family: "Tilt Warp", sans-serif;
@@ -34,6 +41,14 @@ body a {
 .flex-container {
   display: flex;
   flex: 1 1 auto;
+}
+
+.flex-nogrow {
+  flex-grow: 0;
+}
+
+.flex-noshrink {
+  flex-shrink: 0;
 }
 
 .flex-wrap {
@@ -68,30 +83,53 @@ body a {
   justify-content: space-between;
 }
 
+.f-justify-center {
+  justify-content: center;
+}
+
 .f-align-center {
   align-items: center;
+}
+
+.f-align-start {
+  align-items: flex-start;
+}
+
+.f-align-end {
+  align-items: flex-end;
+}
+
+.h-full {
+  height: 100%;
 }
 
 /* special styles for specific elements */
 .title {
   line-height: 0.75em;
-  margin-bottom: 0.5em;
-  margin-top: 0.25em;
+  padding-bottom: 0.5em;
+  padding-top: 0.25em;
+}
+.subtitle {
+  line-height: 0.75em;
+  padding-bottom: 0.5em;
+  padding-top: 0;
+  margin-top: -0.75em;
 }
 
 .sectiontitle {
   height: 1.25em;
   padding: 0.25em;
+  line-height: 1.5em;
 }
 
 .button {
   background: lightgrey;
   border-radius: 0.2em;
-  height: 1.25em;
-  width: -moz-fit-content;
+  height: 2em;
   width: fit-content;
   padding: 0.25em;
-  font-size: 1.5em;
+  font-size: 1.25em;
+  line-height: 2em;
   transition: background 0.25s linear;
   color: #0f0f0f;
   cursor: pointer;
@@ -102,40 +140,61 @@ body a {
 
 .section-container {
   max-width: 100%;
+  min-height: 25%;
+  overflow: hidden;
 }
 
 .section {
   background-color: #0f0f0f;
-  width: 50%;
   transition: background-color 0.25s linear 0.25s, width 0.25s ease-in-out 0.25s;
-  padding: 0.15em;
-  z-index: 0;
 }
+
 .section .button {
   opacity: 0;
   transition: opacity 0.25s linear 0s;
 }
 .section:hover {
   background-color: white;
-  width: 100%;
-  z-index: 1;
 }
 .section:hover .button {
   opacity: 1;
   transition: opacity 0.25s linear 0.5s;
 }
 
-/* responsive layout */
-.responsive {
-  width: max(65vw, 65ch);
-  margin: 0 auto; /* keep content centered */
+form {
+  width: 100%;
+}
+form .userinput {
+  width: 100%;
+  margin-bottom: 1.5em;
 }
 
-@media screen and (orientation: portrait) {
+form .inputfield {
+  height: 1.5em;
+  width: 100%;
+}
+
+.inputfield:hover {
+  cursor: text;
+}
+
+.link {
+  color: grey;
+}
+
+/* responsive layout */
+.responsive {
+  width: 65vw;
+  margin: 0 auto; /* keep content centered */
+  padding: 0;
+  height: 100dvh;
+}
+
+@media screen and (max-width: 768px) {
   body {
-    font-size: 12px;
+    font-size: 10px;
   }
   .flex-responsive-direction {
     flex-direction: column;
   }
-}/*# sourceMappingURL=index.css.map */
+} /*# sourceMappingURL=index.css.map */
