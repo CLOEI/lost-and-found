@@ -1,11 +1,13 @@
+from functools import wraps
+
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from firebase_admin._auth_utils import EmailAlreadyExistsError
 from werkzeug.exceptions import BadRequestKeyError
-from .Firebase import Firebase
 from dotenv import load_dotenv
-from functools import wraps
 
-load_dotenv('./firebase.env')
+from firebase import Firebase
+
+load_dotenv()
 
 app = Flask(__name__)
 fb = Firebase()
@@ -14,7 +16,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         token = request.cookies.get('token')
-        if fb.token_is_valid(token) is False:
+        if not fb.token_is_valid(token):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function

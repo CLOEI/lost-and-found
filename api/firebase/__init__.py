@@ -1,5 +1,6 @@
 from firebase_admin import auth, initialize_app, credentials
 from os import getenv
+import json
 
 
 def cleanup_key(key):
@@ -8,19 +9,7 @@ def cleanup_key(key):
 class Firebase:
   app = None
   def __init__(self):
-    cred = credentials.Certificate({
-      'type': getenv('type'),
-      'project_id': getenv('project_id'),
-      'private_key_id': getenv('private_key_id'),
-      'private_key': cleanup_key(getenv('private_key')),
-      'client_email': getenv('client_email'),
-      'client_id': getenv('client_id'),
-      'auth_uri': getenv('auth_uri'),
-      'token_uri': getenv('token_uri'),
-      'auth_provider_x509_cert_url': getenv('auth_provider_x509_cert_url'),
-      'client_x509_cert_url': getenv('client_x509_cert_url'),
-      'universe_domain': getenv('universe_domain')      
-    })
+    cred = credentials.Certificate(json.loads(getenv('FIREBASE_SERVICE_ACCOUNT')))
     self.app = initialize_app(credential=cred)
   def register_user(self, email:str, display_name: str, password: str):
     user = auth.create_user(email=email, password=password, display_name=display_name, app=self.app)
