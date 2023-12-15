@@ -16,6 +16,9 @@ class Firebase:
   def authenticate_login(self, display_name: str, password: str):
     #TODO: how?
     return auth.create_custom_token('0', app=self.app)
+  def delete_temp_acct(self):
+    user = auth.get_user_by_email('nobody@jxcb.xyz')
+    auth.delete_user(user.uid)
   def token_is_valid(self, token: str):
     try:
       auth.verify_id_token(token, app=self.app)
