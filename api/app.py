@@ -43,9 +43,9 @@ def register():
             password = request.form['password']
             token = fb.register_user(email=email, display_name=display_name, password=password)
             
-            resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': str(token) })
+            resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': token })
             resp.set_cookie('token', token)
-            return redirect(url_for(request.args.get('next', token=str(token))))
+            return redirect(url_for(request.args.get('next'), token=token))
         except BadRequestKeyError:
             return render_template("register.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except EmailAlreadyExistsError:
