@@ -1,12 +1,14 @@
+from functools import wraps
+
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from firebase_admin._auth_utils import EmailAlreadyExistsError
 from firebase_admin.exceptions import InvalidArgumentError
 from werkzeug.exceptions import BadRequestKeyError
-from Firebase import Firebase
 from dotenv import load_dotenv
-from functools import wraps
 
-load_dotenv('./firebase.env')
+from .Firebase import Firebase
+
+load_dotenv()
 
 app = Flask(__name__)
 fb = Firebase()
@@ -41,11 +43,11 @@ def register():
             email = request.form['email']
             display_name = request.form['username']
             password = request.form['password']
-            token = fb.register_user(email=email, display_name=display_name, password=password)
+            data = fb.register_user(email=email, display_name=display_name, password=password)
             
-            resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': token })
-            resp.set_cookie('token', token)
-            return redirect(url_for(request.args.get('next'), token=token))
+            resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
+            resp.set_cookie('token', data['token'])
+            return redirect(url_for(request.args.get('next')), resp)
         except BadRequestKeyError:
             return render_template("register.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except EmailAlreadyExistsError:
@@ -53,29 +55,33 @@ def register():
         except InvalidArgumentError as e:
             return render_template("register.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
         except ValueError as e:
-            return render_template("register.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
+            return { 'status': 'ERROR', 'message': str(e) }, 400
     elif request.method == 'GET':
-        return render_template("register.html", response = {}), 200
+        if fb.token_is_valid(request.cookies.get('token')):
+            return redirect(url_for((request.args.get('next'))))
+        return render_template("register.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         try:
-            display_name = request.form['username']
+            email = request.form['email']
             password = request.form['password']
-            token = fb.authenticate_login(display_name=display_name, password=password)
+            data = fb.login_user(email=email, password=password)
             
-            resp = make_response({ 'status': 'OK', 'message': 'Logged in successfully!', 'token': token })
-            resp.set_cookie('token', token)
-            return redirect(url_for(request.args.get('next')))
+            resp = make_response({ 'status': 'OK', 'message': 'Logged in successfully!', 'token': data['token'] })
+            resp.set_cookie('token', data['token'])
+            return redirect(url_for(request.args.get('next'), resp))
         except BadRequestKeyError:
             return render_template("login.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except InvalidArgumentError as e:
             return render_template("login.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
         except ValueError as e:
             return render_template("login.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
-    elif request.method == 'GET':
-        return render_template("login.html", response = {}), 200
+    elif request.method == 'GET':   
+        if fb.token_is_valid(request.cookies.get('token')):
+            return redirect(url_for(request.args.get('next')), resp)
+        return render_template("login.html")
 
 @app.route("/report")
 @login_required
