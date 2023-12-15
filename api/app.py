@@ -23,18 +23,9 @@ def login_required(f):
             return f(*args, **kwargs)
     return decorated_function
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/")
 def index():
-    if request.method == 'POST':
-        try:
-            if not request.form['firstp'] == 'qwerasdfzxcv':
-                raise Exception("gtfo")
-            fb.delete_temp_acct()
-            return render_template("index.html", r={ 's': 'yes' })
-        except Exception as e:
-            return render_template("index.html", r={ 's': str(e) })
-    elif request.method == 'GET':
-        return render_template("index.html")
+    return render_template("index.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
