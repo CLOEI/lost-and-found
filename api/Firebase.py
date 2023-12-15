@@ -12,7 +12,7 @@ class Firebase:
     self.app = initialize_app(credential=cred)
   def register_user(self, email:str, display_name: str, password: str):
     user = auth.create_user(email=email, password=password, display_name=display_name, app=self.app)
-    return auth.create_custom_token(user.uid, app=self.app)
+    return auth.create_custom_token(user.uid, app=self.app).decode()
   def authenticate_login(self, display_name: str, password: str):
     #TODO: how?
     return auth.create_custom_token('0', app=self.app)
