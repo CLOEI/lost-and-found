@@ -76,7 +76,18 @@
               class="flex-container flex-nogrow flex-col f-align-center"
               style="width: 100%"
             >
-              <p>Have an account? <a href="login" class="link">Login</a></p>
+              <p>
+                Have an account? {% if request.args.get('next') %}
+                <a
+                  href="login?next={{ request.args.get('next') }}"
+                  class="link"
+                >
+                  Login
+                </a>
+                {% else %}
+                <a href="login" class="link"> Login </a>
+                {% endif %}
+              </p>
             </div>
           </div>
         </div>

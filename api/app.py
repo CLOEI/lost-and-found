@@ -2,6 +2,7 @@ from functools import wraps
 
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from firebase_admin._auth_utils import EmailAlreadyExistsError
+from firebase_admin.exceptions import InvalidArgumentError
 from werkzeug.exceptions import BadRequestKeyError
 from dotenv import load_dotenv
 
@@ -16,9 +17,10 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         token = request.cookies.get('token')
-        if not fb.token_is_valid(token):
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
+        if fb.token_is_valid(token) is False:
+            return redirect(url_for('login', next=f.__name__))
+        else:
+            return f(*args, **kwargs)
     return decorated_function
 
 @app.route("/")
@@ -35,18 +37,20 @@ def register():
             rememberme = request.form['rememberme']
             data = fb.register_user(email=email, display_name=display_name, password=password, rememberme=rememberme)
             
-            resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
+            resp = make_response(redirect(url_for(request.args.get('next'))), response={ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
             resp.set_cookie('token', data['token'])
             return 
         except BadRequestKeyError:
-            return { 'status': 'ERROR', 'message': 'All fields are required!' }, 400
+            return render_template("register.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except EmailAlreadyExistsError:
-            return { 'status': 'ERROR', 'message': 'Email already exists!' }, 400
+            return render_template("register.html", response = { 'status': 'ERROR', 'message': 'Email already exists!' }), 400
+        except InvalidArgumentError as e:
+            return render_template("register.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
         except ValueError as e:
             return { 'status': 'ERROR', 'message': str(e) }, 400
     elif request.method == 'GET':
         if fb.token_is_valid(request.cookies.get('token')):
-            return redirect(url_for('index'))
+            return redirect(url_for((request.args.get('next'))))
         return render_template("register.html")
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -56,17 +60,19 @@ def login():
             email = request.form['email']
             password = request.form['password']
             data = fb.login_user(email=email, password=password)
-            
-            resp = make_response({ 'status': 'OK', 'message': 'Logged in successfully!', 'token': data['token'] })
+            return render_template("login.html", response={ 'status': 'ERROR', 'message': data})
+            resp = make_response(redirect(url_for(request.args.get('next'))), response={ 'status': 'OK', 'message': 'Logged in successfully!', 'token': data['token'] })
             resp.set_cookie('token', data['token'])
             return resp
         except BadRequestKeyError:
-            return { 'status': 'ERROR', 'message': 'All fields are required!' }, 400
+            return render_template("login.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
+        except InvalidArgumentError as e:
+            return render_template("login.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
         except ValueError as e:
-            return { 'status': 'ERROR', 'message': str(e) }, 400
+            return render_template("login.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
     elif request.method == 'GET':   
         if fb.token_is_valid(request.cookies.get('token')):
-            return redirect(url_for('index'))
+            return redirect(url_for(request.args.get('next')))
         return render_template("login.html")
 
 @app.route("/report")

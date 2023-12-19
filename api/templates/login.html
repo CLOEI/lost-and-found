@@ -32,10 +32,10 @@
                 <h3 class="sectiontitle" style="padding: 0">Username</h3>
                 <input
                   type="text"
-                  name="username"
-                  id="username"
+                  name="email"
+                  id="email"
                   class="inputfield"
-                  value="{{ request.form.username }}"
+                  value="{{ request.form.email }}"
                 />
 
                 />
@@ -66,7 +66,18 @@
               class="flex-container flex-nogrow flex-col f-align-center"
               style="width: 100%"
             >
-              <p>No account? <a href="register" class="link">Register</a></p>
+              <p>
+                No account? {% if request.args.get('next') %}
+                <a
+                  href="register?next={{ request.args.get('next') }}"
+                  class="link"
+                >
+                  Register
+                </a>
+                {% else %}
+                <a href="register" class="link"> Register </a>
+                {% endif %}
+              </p>
             </div>
           </div>
         </div>
