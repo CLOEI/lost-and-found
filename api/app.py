@@ -6,7 +6,7 @@ from firebase_admin.exceptions import InvalidArgumentError
 from werkzeug.exceptions import BadRequestKeyError
 from dotenv import load_dotenv
 
-from .Firebase import Firebase
+from Firebase import Firebase
 
 load_dotenv()
 
@@ -36,9 +36,9 @@ def register():
             password = request.form['password']
             data = fb.register_user(email=email, display_name=display_name, password=password)
             
-            resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
+            resp = make_response(redirect(url_for(request.args.get('next'))), response={ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
             resp.set_cookie('token', data['token'])
-            return redirect(url_for(request.args.get('next')), resp)
+            return resp
         except BadRequestKeyError:
             return render_template("register.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except EmailAlreadyExistsError:
@@ -59,10 +59,10 @@ def login():
             email = request.form['email']
             password = request.form['password']
             data = fb.login_user(email=email, password=password)
-            
-            resp = make_response({ 'status': 'OK', 'message': 'Logged in successfully!', 'token': data['token'] })
+            return render_template("login.html", response={ 'status': 'ERROR', 'message': data})
+            resp = make_response(redirect(url_for(request.args.get('next'))), response={ 'status': 'OK', 'message': 'Logged in successfully!', 'token': data['token'] })
             resp.set_cookie('token', data['token'])
-            return redirect(url_for(request.args.get('next'), resp))
+            return resp
         except BadRequestKeyError:
             return render_template("login.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except InvalidArgumentError as e:
@@ -71,7 +71,7 @@ def login():
             return render_template("login.html", response = { 'status': 'ERROR', 'message': str(e) }), 400
     elif request.method == 'GET':   
         if fb.token_is_valid(request.cookies.get('token')):
-            return redirect(url_for(request.args.get('next')), resp)
+            return redirect(url_for(request.args.get('next')))
         return render_template("login.html")
 
 @app.route("/report")
