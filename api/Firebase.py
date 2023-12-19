@@ -32,7 +32,7 @@ class Firebase:
     salt = bcrypt.gensalt()
     uid = str(uuid.uuid4())
     password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
-    token = jwt.encode(claims={'uid': uid}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() + 3600})
+    token = jwt.encode(claims={'uid': uid}, key=getenv('JWT_PRIVATE'), algorithm='HS256', headers={'exp': time.time() + 3600})
 
     users_ref.add({
       'uid': uid,
@@ -43,7 +43,7 @@ class Firebase:
     })
     return {'token': token}
 
-  def login_user(self, email: str, password: str):
+  def login_user(self, email: str, password: str, rememberme: bool = False):
     if not all([email, password]):
       raise BadRequestKeyError
 
@@ -57,7 +57,7 @@ class Firebase:
     if not bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
       raise ValueError('Incorrect password')
 
-    token = jwt.encode(claims={'uid': user['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() + 3600})
+    token = jwt.encode(claims={'uid': user['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() * 3600 if rememberme else time.time() + 3600})
     return {'token': token}
 
   def token_is_valid(self, token: str):

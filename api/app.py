@@ -5,7 +5,7 @@ from firebase_admin._auth_utils import EmailAlreadyExistsError
 from werkzeug.exceptions import BadRequestKeyError
 from dotenv import load_dotenv
 
-from .Firebase import Firebase
+from Firebase import Firebase
 
 load_dotenv()
 
@@ -32,11 +32,12 @@ def register():
             email = request.form['email']
             display_name = request.form['username']
             password = request.form['password']
-            data = fb.register_user(email=email, display_name=display_name, password=password)
+            rememberme = request.form['rememberme']
+            data = fb.register_user(email=email, display_name=display_name, password=password, rememberme=rememberme)
             
             resp = make_response({ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
             resp.set_cookie('token', data['token'])
-            return resp
+            return 
         except BadRequestKeyError:
             return { 'status': 'ERROR', 'message': 'All fields are required!' }, 400
         except EmailAlreadyExistsError:
