@@ -5,7 +5,7 @@ from firebase_admin._auth_utils import EmailAlreadyExistsError
 from werkzeug.exceptions import BadRequestKeyError
 from dotenv import load_dotenv
 
-from .Firebase import Firebase
+from Firebase import Firebase
 
 load_dotenv()
 
