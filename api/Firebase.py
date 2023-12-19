@@ -24,7 +24,7 @@ class Firebase:
       raise ValueError('Password must be at least 6 characters long')
 
     users_ref = self.firestore.collection('users')
-    user = users_ref.where(filter=FieldFilter('email', '==', email)).stream()
+    user = users_ref.where(filter=FieldFilter('email', '==', email)).get()
 
     if len(user) > 0:
       raise EmailAlreadyExistsError('Email already exists', email, 400)
@@ -48,14 +48,13 @@ class Firebase:
       raise BadRequestKeyError
 
     users_ref = self.firestore.collection('users')
-    #if users_ref.where(filter=FieldFilter('email', '==', email)).count():
-    #  raise ValueError('User not found')
 
-    return users_ref.where(filter=FieldFilter('email', '==', email)).count().get()
+    if len(users_ref.where(filter=FieldFilter('email', '==', email)).get()) == 0:
+      raise ValueError('User not found')
 
     user = users_ref.where(filter=FieldFilter('email', '==', email)).get()[0].to_dict() # what a cursed line
 
-    if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+    if not bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
       raise ValueError('Incorrect password')
 
     token = jwt.encode(claims={'uid': user['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() * 3600 if rememberme else time.time() + 3600})
