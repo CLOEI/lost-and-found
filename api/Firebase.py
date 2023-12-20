@@ -48,17 +48,17 @@ class Firebase:
       raise BadRequestKeyError
 
     users_ref = self.firestore.collection('users')
-    #if users_ref.where(filter=FieldFilter('email', '==', email)).count():
-    #  raise ValueError('User not found')
+    user = users_ref.where('email', '==', email).get()
 
-    return users_ref.where(filter=FieldFilter('email', '==', email)).count().get()
+    if len(user) == 0:
+      raise ValueError('User not found')
 
-    user = users_ref.where(filter=FieldFilter('email', '==', email)).get()[0].to_dict() # what a cursed line
+    user_dict = user[0].to_dict()
 
-    if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+    if not bcrypt.checkpw(password.encode('utf-8'), user_dict['password'].encode('utf-8')):
       raise ValueError('Incorrect password')
 
-    token = jwt.encode(claims={'uid': user['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() * 3600 if rememberme else time.time() + 3600})
+    token = jwt.encode(claims={'uid': user_dict['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() * 3600 if rememberme else time.time() + 3600})
     return {'token': token}
 
   def token_is_valid(self, token: str):

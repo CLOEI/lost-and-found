@@ -36,10 +36,9 @@ def register():
             password = request.form['password']
             rememberme = request.form['rememberme']
             data = fb.register_user(email=email, display_name=display_name, password=password, rememberme=rememberme)
-            
-            resp = make_response(redirect(url_for(request.args.get('next'))), response={ 'status': 'OK', 'message': 'Registered successfully!', 'token': data['token'] })
+            resp = make_response(redirect(url_for(request.args.get('next'))))
             resp.set_cookie('token', data['token'])
-            return 
+            return  resp
         except BadRequestKeyError:
             return render_template("register.html", response = { 'status': 'ERROR', 'message': 'All fields are required!' }), 400
         except EmailAlreadyExistsError:
@@ -60,8 +59,7 @@ def login():
             email = request.form['email']
             password = request.form['password']
             data = fb.login_user(email=email, password=password)
-            return render_template("login.html", response={ 'status': 'ERROR', 'message': data})
-            resp = make_response(redirect(url_for(request.args.get('next'))), response={ 'status': 'OK', 'message': 'Logged in successfully!', 'token': data['token'] })
+            resp = make_response(redirect(url_for(request.args.get('next'))))
             resp.set_cookie('token', data['token'])
             return resp
         except BadRequestKeyError:
