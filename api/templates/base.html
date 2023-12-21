@@ -57,10 +57,17 @@
           </div>
           {% endif %}
         </div>
+        {% if request.endpoint == 'index' %}
+        <div
+          class="flex-container flex-col flex-nogrow f-justify-center"
+          style="height: 80%"
+        >
+        {% else %}
         <div
           class="flex-container flex-col flex-nogrow f-justify-start"
           style="height: 75%"
         >
+        {% endif %}
           <div>
             {% block errormsg %}{% endblock %}
             <h1 class="title">Lost &<br />Found</h1>
