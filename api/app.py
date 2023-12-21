@@ -168,7 +168,13 @@ def listing():
 
 @app.route("/listing/<id>")
 def post(id):
-    return render_template("post.html")
+    post = fb.get_post_by_id(id)
+    return (
+        render_template(
+            "post.html", response={"status": "OK", "message": "mangstap", "post": post}
+        ),
+        400,
+    )
 
 
 @app.route("/profile")

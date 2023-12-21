@@ -1,6 +1,5 @@
-{% extends 'base.html' %}
-{% set has_back = True %}
-{% block subtitle %}
+{% extends 'base.html' %} {% set has_back = True %} {% set return_destination =
+'index' %} {% block subtitle %}
 <h2 class="subtitle">Report Lost Item</h2>
 {% endblock %} {% block contents %}
 
@@ -43,5 +42,6 @@
         Submit
       </button>
     </div>
+  </form>
 </div>
 {% endblock %}

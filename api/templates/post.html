@@ -1,23 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/reset.css') }}"
+{% extends 'base.html' %} {% set has_back = True %} {% set return_destination =
+'listing' %} {% block errormsg %} {% if response %}
+<p>{{ response.message }}</p>
+{% endif %} {% endblock %} {% block subtitle %}
+<h2 class="subtitle">Lost Item</h2>
+{% endblock %} {% block contents %}
+<div
+  class="grid-container"
+  style="grid-template-columns: auto auto; grid-template-rows: auto auto auto"
+>
+  <div class="post-title" style="grid-column: 1 / span 1; grid-row: 1 / span 1">
+    <h3 class="sectiontitle" style="padding: 0">{{ response.post.title }}</h3>
+  </div>
+  <div class="post-info" style="grid-column: 1 / span 1; grid-row: 2 / span 2">
+    <p class="post-description">{{ response.post.body }}</p>
+    <p class="post-author">posted by {{ response.post.post_owner }}</p>
+  </div>
+  <div class="post-image" style="grid-column: 2 / span 1; grid-row: 1 / span 3">
+    <img
+      src="{{response.post.attachment_url}}"
+      alt="Image of {{response.post.title}}"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/index.css') }}"
-    />
-    <script
-      src="https://kit.fontawesome.com/c38dc880e5.js"
-      crossorigin="anonymous"
-    ></script>
-    <title>Lost & Found</title>
-  </head>
-  <body>
-    <div class="responsive"></div>
-  </body>
-</html>
+  </div>
+</div>
+{% endblock %}

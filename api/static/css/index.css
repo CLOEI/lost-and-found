@@ -201,12 +201,13 @@ form .inputfield {
 }
 
 .card {
-  background: #acacac;
+  background: #8f8f8f;
   width: 100%;
   aspect-ratio: 4/5;
 }
 
 .card-image {
+  background: #acacac;
   margin: 0;
   padding: 0;
   height: 70%;
@@ -237,12 +238,24 @@ form .inputfield {
   font-size: 0.5em;
 }
 
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* responsive layout */
 .responsive {
   width: 65vw;
   margin: 0 auto; /* keep content centered */
   padding: 0;
   height: 100dvh;
+}
+
+@media screen and (max-width: 1440px) {
+  .grid-container {
+    grid-template-columns: 32.3% 32.3% 32.3%;
+  }
 }
 
 @media screen and (max-width: 1024px) {

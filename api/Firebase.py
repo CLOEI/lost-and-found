@@ -94,7 +94,7 @@ class Firebase:
 
     def get_user_info(self, uid: str):
         users_ref = self.firestore.collection("users")
-        user = users_ref.where('id', '==', uid).get()[0].to_dict()
+        user = users_ref.where("id", "==", uid).get()[0].to_dict()
 
         if user is None:
             raise ValueError("User not found")
@@ -111,8 +111,10 @@ class Firebase:
 
     def get_post_by_id(self, post_id: str):
         posts_ref = self.firestore.collection("posts")
-        post = posts_ref.where('id', '==', post_id).get()
-        return post.to_dict()
+        post = (
+            posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0].to_dict()
+        )
+        return post
 
     def get_posts_by_uid(self, uid: str):
         posts_ref = self.firestore.collection("posts")
