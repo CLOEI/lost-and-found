@@ -72,7 +72,7 @@ class Firebase:
 
   def get_user_info(self, uid: str):
     users_ref = self.firestore.collection('users')
-    user = users_ref.document(uid).get().to_dict()
+    user = users_ref.where('uid', '==', uid).get()[0].to_dict()
 
     if user is None:
       raise ValueError('User not found')
@@ -132,7 +132,7 @@ class Firebase:
     attachment_url = self.upload_file(attachment)
     posts_ref = self.firestore.collection('posts')
     # from jwt decode it and get the uid
-    uid = jwt.decode(token, getenv('jwt_private'), algorithms='HS256')['uid']
+    uid = self.get_uid_from_token(token)
     post_id = str(uuid.uuid4())
     posts_ref.add({
       'id': post_id,
@@ -149,3 +149,6 @@ class Firebase:
     blob.upload_from_file(file.stream)
     blob.make_public()
     return blob.public_url
+  
+  def get_uid_from_token(self, token: str):
+    return jwt.decode(token, getenv('jwt_private'), algorithms='HS256')['uid']
