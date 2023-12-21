@@ -15,7 +15,7 @@
         <h4>{{post.title}}</h4>
         <p class="post-description">{{post.body}}</p>
         <p class="post-author" style="text-align: right">
-          posted by {{post.post_owner}}
+          posted by {{ get_username_from_id(post.post_owner) }}
         </p>
       </div>
     </a>

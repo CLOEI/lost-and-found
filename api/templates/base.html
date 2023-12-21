@@ -40,20 +40,28 @@
   </head>
   <body>
     <div class="responsive">
-      {% if has_back %}
-      <div
-        class="backbutton"
-        style="position: absolute; top: 4ch; font-size: 20px; color: white"
-      >
-        <a href="{{ url_for(return_destination) }}">
-          <i class="fa-solid fa-caret-left fa-2xl"></i>
-        </a>
-      </div>
-      {% endif %}
-      <div class="flex-container flex-nowrap flex-col f-justify-center h-full">
-        {% block errormsg %}{% endblock %}
-        <h1 class="title">Lost &<br />Found</h1>
-        {% block subtitle %}{% endblock %}
+      <div class="flex-container flex-nowrap flex-col f-justify-around h-full">
+        <div
+          class="navigation flex-container flex-row-rev flex-nogrow f-justify-between f-align-end"
+        >
+          <div class="profilebutton" style="font-size: 20px; color: white">
+            <a href="{{ url_for('profile') }}">
+              <i class="fa-solid fa-user"></i>
+            </a>
+          </div>
+          {% if has_back %}
+          <div class="backbutton" style="font-size: 20px; color: white">
+            <a href="{{ url_for(return_destination) }}">
+              <i class="fa-solid fa-caret-left fa-2xl"></i>
+            </a>
+          </div>
+          {% endif %}
+        </div>
+        <div>
+          {% block errormsg %}{% endblock %}
+          <h1 class="title">Lost &<br />Found</h1>
+          {% block subtitle %}{% endblock %}
+        </div>
         <div
           class="flex-container flex-col flex-nowrap flex-nogrow f-justify-center section-container"
         >

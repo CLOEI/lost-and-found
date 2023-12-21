@@ -153,17 +153,25 @@ def listing():
             return (
                 render_template(
                     "listing.html",
-                    response={"status": "OK", "message": "mangstap", "posts": posts},
+                    response={"status": "OK", "posts": posts},
                 ),
                 400,
             )
         except ValueError as e:
             return (
                 render_template(
-                    "listing", response={"status": "ERROR", "message": str(e)}
+                    "listing.html", response={"status": "ERROR", "message": str(e)}
                 ),
                 400,
             )
+
+
+@app.context_processor
+def utility_processor():
+    def get_username_from_id(id):
+        return fb.get_username_only(id)
+
+    return dict(get_username_from_id=get_username_from_id)
 
 
 @app.route("/listing/<id>")

@@ -44,10 +44,16 @@ body a {
   flex: 1 1 auto;
 }
 
+.flex-grow {
+  flex-grow: 1;
+}
 .flex-nogrow {
   flex-grow: 0;
 }
 
+.flex-shrink {
+  flex-shrink: 1;
+}
 .flex-noshrink {
   flex-shrink: 0;
 }
@@ -108,6 +114,9 @@ body a {
 
 .h-full {
   height: 100%;
+}
+.w-full {
+  width: 100%;
 }
 
 .scroll-container {

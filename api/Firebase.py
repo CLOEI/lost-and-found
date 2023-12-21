@@ -94,15 +94,28 @@ class Firebase:
 
     def get_user_info(self, uid: str):
         users_ref = self.firestore.collection("users")
-        user = users_ref.where("id", "==", uid).get()[0].to_dict()
+        user = users_ref.where(filter=FieldFilter("uid", "==", uid)).get()
 
-        if user is None:
+        if len(user) is 0:
             raise ValueError("User not found")
+
+        user = user[0].to_dict()
 
         user["comments"] = self.get_comments_by_uid(uid)
         user["posts"] = self.get_posts_by_uid(uid)
 
         return user
+
+    def get_username_only(self, uid: str):
+        users_ref = self.firestore.collection("users")
+        user = users_ref.where(filter=FieldFilter("uid", "==", uid)).get()
+
+        if len(user) is 0:
+            raise ValueError("User not found")
+
+        dn = user[0].to_dict()["display_name"]
+
+        return dn
 
     def get_posts(self):
         posts_ref = self.firestore.collection("posts")
