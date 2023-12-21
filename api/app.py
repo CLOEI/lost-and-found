@@ -29,7 +29,7 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    next = request.args.get('next')
+    next = request.args.get('next') if request.args.get('next') else 'index'
     if request.method == 'POST':
         try:
             email = request.form['email']
@@ -57,7 +57,7 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    next = request.args.get('next')
+    next = request.args.get('next') if request.args.get('next') else 'index'
     if request.method == 'POST':
         try:
             email = request.form['email']

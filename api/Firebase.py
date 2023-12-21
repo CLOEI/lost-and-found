@@ -60,12 +60,12 @@ class Firebase:
     if not bcrypt.checkpw(password.encode('utf-8'), user_dict['password'].encode('utf-8')):
       raise ValueError('Incorrect password')
 
-    token = jwt.encode(claims={'uid': user_dict['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() + (3600 * 24 * 30) if rememberme else time.time() + 3600})
+    token = jwt.encode(claims={'uid': user_dict['uid']}, key=getenv('JWT_PRIVATE'), algorithm='HS256', headers={'exp': time.time() + (3600 * 24 * 30) if rememberme else time.time() + 3600})
     return {'token': token}
 
   def token_is_valid(self, token: str):
     try:
-      jwt.decode(token, getenv('jwt_private'), algorithms='HS256')
+      jwt.decode(token, getenv('JWT_PRIVATE'), algorithms='HS256')
       return True
     except:
       return False
@@ -128,8 +128,9 @@ class Firebase:
   def create_listing(self, title: str, body: str, attachment: FileStorage, token: str):
     if not all([title, body]):
       raise BadRequestKeyError
-
-    attachment_url = self.upload_file(attachment)
+    
+    attachment_url = self.upload_file(attachment) if attachment else None
+    
     posts_ref = self.firestore.collection('posts')
     # from jwt decode it and get the uid
     uid = self.get_uid_from_token(token)
@@ -151,4 +152,4 @@ class Firebase:
     return blob.public_url
   
   def get_uid_from_token(self, token: str):
-    return jwt.decode(token, getenv('jwt_private'), algorithms='HS256')['uid']
+    return jwt.decode(token, getenv('JWT_PRIVATE'), algorithms='HS256')['uid']

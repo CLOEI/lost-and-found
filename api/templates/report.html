@@ -1,26 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lost & Found | Report</title>
-  </head>
-  <body>
-    <h1>Report</h1>
-    <a href="/">Homepage</a>
+{% extends 'base.html' %}
+{% set has_back = True %}
+{% block subtitle %}
+<h2 class="subtitle">Report Lost Item</h2>
+{% endblock %} {% block contents %}
 
-    <form action="/report" method="post" enctype="multipart/form-data">
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title" required /><br /><br />
-
-      <label for="body">Body Text:</label>
-      <textarea id="body" name="body" rows="4" cols="50" required></textarea
+<div class="flex-container flex-col f-justify-center f-align-start">
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="userinput">
+      <label for="title" class="sectiontitle" style="padding: 0"> Title </label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="inputfield"
+        required
+      /><br /><br />
+    </div>
+    <div class="userinput">
+      <label for="body" class="sectiontitle" style="padding: 0"
+        >Description</label
+      >
+      <textarea
+        id="body"
+        name="body"
+        rows="4"
+        cols="50"
+        class="inputfield resizable"
+        required
+      ></textarea
       ><br /><br />
-
-      <label for="attachment">Attachment:</label>
+    </div>
+    <div class="userinput">
+      <label for="attachment">Picture</label>
       <input type="file" id="attachment" name="attachment" /><br /><br />
-
-      <input type="submit" value="Submit" />
-    </form>
-  </body>
-</html>
+    </div>
+    <div class="userinput flex-container flex-nogrow flex-col f-align-end">
+      <button
+        type="submit"
+        class="button"
+        style="width: 12ch; line-height: 1.25em"
+      >
+        Submit
+      </button>
+    </div>
+</div>
+{% endblock %}

@@ -26,7 +26,8 @@ body h2 {
   font-family: "Tilt Warp", sans-serif;
   font-size: 2em;
 }
-body h3 {
+body h3,
+form label {
   color: #acacac;
   font-family: "Tilt Warp", sans-serif;
   font-size: 1.5em;
@@ -103,6 +104,17 @@ body a {
   height: 100%;
 }
 
+.scroll-container {
+  overflow: scroll;
+  height: 100%;
+  width: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
 /* special styles for specific elements */
 .title {
   line-height: 0.75em;
@@ -174,6 +186,10 @@ form .inputfield {
   width: 100%;
 }
 
+.inputfield.resizable {
+  min-height: 10em;
+}
+
 .inputfield:hover {
   cursor: text;
 }
@@ -193,6 +209,13 @@ form .inputfield {
 @media screen and (max-width: 768px) {
   body {
     font-size: 10px;
+  }
+  .responsive {
+    width: 80vw;
+  }
+  .section-container {
+    min-height: 15%;
+    overflow: hidden;
   }
   .flex-responsive-direction {
     flex-direction: column;

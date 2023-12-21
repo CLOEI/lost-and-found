@@ -1,101 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/reset.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/index.css') }}"
-    />
-    <script
-      src="https://kit.fontawesome.com/c38dc880e5.js"
-      crossorigin="anonymous"
-    ></script>
-    <title>Lost & Found</title>
-  </head>
-  <body>
-    <div class="responsive">
-      <div class="flex-container flex-nowrap flex-col f-justify-center h-full">
-        {% if response %} {% if response.status == 'ERROR' %}
-        <p>{{ response.message }}</p>
-        {% endif %} {% endif %}
-        <a href="/">
-          <h1 class="title">Lost &<br />Found</h1>
-        </a>
-        <h2 class="subtitle">Register</h2>
-        <div
-          class="flex-container flex-col flex-nowrap flex-nogrow f-justify-center section-container"
-        >
-          <div class="flex-container flex-col f-justify-center f-align-start">
-            <form action="" method="post">
-              <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Email</h3>
-                <input
-                  type="text"
-                  name="email"
-                  id="email"
-                  class="inputfield"
-                  value="{{ request.form.email }}"
-                />
-              </div>
-              <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Username</h3>
-                <input
-                  type="text"
-                  name="username"
-                  id="username"
-                  class="inputfield"
-                  value="{{ request.form.username }}"
-                />
-
-                />
-              </div>
-              <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Password</h3>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  class="inputfield"
-                  value="{{ request.form.password }}"
-                />
-              </div>
-              <div
-                class="userinput flex-container flex-nogrow flex-col f-align-end"
-              >
-                <button
-                  type="submit"
-                  class="button"
-                  style="width: 12ch; line-height: 1.25em"
-                >
-                  Register
-                </button>
-              </div>
-            </form>
-            <div
-              class="flex-container flex-nogrow flex-col f-align-center"
-              style="width: 100%"
-            >
-              <p>
-                Have an account? {% if request.args.get('next') %}
-                <a
-                  href="login?next={{ request.args.get('next') }}"
-                  class="link"
-                >
-                  Login
-                </a>
-                {% else %}
-                <a href="login" class="link"> Login </a>
-                {% endif %}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+{% extends 'base.html' %} {% set has_back = True %} {% block errormsg %} {% if
+response %} {% if response.status == 'ERROR' %}
+<p>{{ response.message }}</p>
+{% endif %} {% endif %} {% endblock %} {% block subtitle %}
+<h2 class="subtitle">Register</h2>
+{% endblock %} {% block contents %}
+<div class="flex-container flex-col f-justify-center f-align-start">
+  <form action="" method="post">
+    <div class="userinput">
+      <label for="email" class="sectiontitle" style="padding: 0"> Email </label>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        class="inputfield"
+        value="{{ request.form.email }}"
+      />
     </div>
-  </body>
-</html>
+    <div class="userinput">
+      <label for="username" class="sectiontitle" style="padding: 0">
+        Username
+      </label>
+      <input
+        type="text"
+        name="username"
+        id="username"
+        class="inputfield"
+        value="{{ request.form.username }}"
+      />
+
+      />
+    </div>
+    <div class="userinput">
+      <label for="password" class="sectiontitle" style="padding: 0">
+        Password
+      </label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        class="inputfield"
+        value="{{ request.form.password }}"
+      />
+    </div>
+    <div class="userinput flex-container flex-nogrow flex-col f-align-end">
+      <button
+        type="submit"
+        class="button"
+        style="width: 12ch; line-height: 1.25em"
+      >
+        Register
+      </button>
+    </div>
+  </form>
+  <div
+    class="flex-container flex-nogrow flex-col f-align-center"
+    style="width: 100%"
+  >
+    <p>
+      Have an account? {% if request.args.get('next') %}
+      <a href="login?next={{ request.args.get('next') }}" class="link">
+        Login
+      </a>
+      {% else %}
+      <a href="login" class="link"> Login </a>
+      {% endif %}
+    </p>
+  </div>
+</div>
+{% endblock %}
