@@ -13,8 +13,8 @@ response %} {% if response.status == 'ERROR' %}
       </div>
       <div class="flex-container card-contents flex-col f-justify-around">
         <h4>{{post.title}}</h4>
-        <p>{{post.body}}</p>
-        <p style="font-size: x-small; text-align: right">
+        <p class="post-description">{{post.body}}</p>
+        <p class="post-author" style="text-align: right">
           posted by {{post.post_owner}}
         </p>
       </div>
