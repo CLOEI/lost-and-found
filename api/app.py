@@ -162,8 +162,16 @@ def listing():
 
 
 @app.route("/listing/<id>")
-def post():
+def post(id):
     return render_template("post.html")
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    user = fb.get_user_info(fb.get_uid_from_token(request.cookies.get("token")))
+    print(user)
+    return render_template("profile.html", data=user)
 
 
 if __name__ == "__main__":

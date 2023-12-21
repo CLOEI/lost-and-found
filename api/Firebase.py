@@ -93,16 +93,16 @@ class Firebase:
             return False
 
     def get_user_info(self, uid: str):
-        users_ref = self.firestore.collection("users")
-        user = users_ref.document(uid).get().to_dict()
+      users_ref = self.firestore.collection('users')
+      user = users_ref.document(uid).get().to_dict()
 
-        if user is None:
-            raise ValueError("User not found")
+      if user is None:
+        raise ValueError("User not found")
 
-        user["comments"] = self.get_comments_by_uid(uid)
-        user["posts"] = self.get_posts_by_uid(uid)
+      user["comments"] = self.get_comments_by_uid(uid)
+      user["posts"] = self.get_posts_by_uid(uid)
 
-        return user
+      return user
 
     def get_posts(self):
         posts_ref = self.firestore.collection("posts")
@@ -144,37 +144,36 @@ class Firebase:
 
         return nested_comments
 
-    def get_comments_by_uid(self, uid: str):
-        comments_ref = self.firestore.collection("comments")
-        comments = comments_ref.where("uid", "==", uid).get()
-        return [comment.to_dict() for comment in comments]
+  def get_comments_by_uid(self, uid: str):
+    comments_ref = self.firestore.collection('comments')
+    comments = comments_ref.where('uid', '==', uid).get()
+    return [comment.to_dict() for comment in comments]
+  
+  def create_listing(self, title: str, body: str, attachment: FileStorage, token: str):
+    if not all([title, body]):
+      raise BadRequestKeyError
+    
+    attachment_url = self.upload_file(attachment) if attachment else None
+    
+    posts_ref = self.firestore.collection('posts')
+    # from jwt decode it and get the uid
+    uid = self.get_uid_from_token(token)
+    post_id = str(uuid.uuid4())
+    posts_ref.add({
+      'id': post_id,
+      'title': title,
+      'body': body,
+      'post_owner': uid,
+      'post_date': time.time(),
+      'attachment_url': attachment_url
+    })
+    return post_id
 
-    def create_listing(
-        self, title: str, body: str, attachment: FileStorage, token: str
-    ):
-        if not all([title, body]):
-            raise BadRequestKeyError
-
-        attachment_url = self.upload_file(attachment) if attachment else None
-
-        posts_ref = self.firestore.collection("posts")
-        # from jwt decode it and get the uid
-        uid = jwt.decode(token, getenv("JWT_PRIVATE"), algorithms="HS256")["uid"]
-        post_id = str(uuid.uuid4())
-        posts_ref.add(
-            {
-                "id": post_id,
-                "title": title,
-                "body": body,
-                "post_owner": uid,
-                "post_date": time.time(),
-                "attachment_url": attachment_url,
-            }
-        )
-        return post_id
-
-    def upload_file(self, file: FileStorage):
-        blob = self.storage.blob(file.filename)
-        blob.upload_from_file(file.stream)
-        blob.make_public()
-        return blob.public_url
+  def upload_file(self, file: FileStorage):
+    blob = self.storage.blob(file.filename)
+    blob.upload_from_file(file.stream)
+    blob.make_public()
+    return blob.public_url
+  
+  def get_uid_from_token(self, token: str):
+    return jwt.decode(token, getenv('JWT_PRIVATE'), algorithms='HS256')['uid']
