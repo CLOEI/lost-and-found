@@ -19,7 +19,16 @@
   </head>
   <body>
     <div class="responsive">
-      {% block backbutton %}{% endblock %}
+      {% if has_back %}
+      <div
+        class="backbutton"
+        style="position: absolute; top: 4ch; font-size: 20px; color: white"
+      >
+        <a href="{{ url_for('index') }}">
+          <i class="fa-solid fa-caret-left fa-2xl"></i>
+        </a>
+      </div>
+      {% endif %}
       <div class="flex-container flex-nowrap flex-col f-justify-center h-full">
         {% block errormsg %}{% endblock %}
         <a href="/">

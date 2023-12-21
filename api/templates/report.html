@@ -1,13 +1,6 @@
-{% extends 'base.html' %} {% block backbutton %}
-<div
-  class="backbutton"
-  style="position: absolute; top: 4ch; font-size: 20px; color: white"
->
-  <a href="{{ url_for('index') }}">
-    <i class="fa-solid fa-caret-left fa-2xl"></i>
-  </a>
-</div>
-{% endblock %} {% block subtitle %}
+{% extends 'base.html' %}
+{% set has_back = True %}
+{% block subtitle %}
 <h2 class="subtitle">Report Lost Item</h2>
 {% endblock %} {% block contents %}
 

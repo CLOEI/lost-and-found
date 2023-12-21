@@ -1,14 +1,5 @@
-{% extends 'base.html' %} {% block backbutton %}
-<div
-  class="backbutton"
-  style="position: absolute; top: 4ch; font-size: 20px; color: white"
->
-  <a href="{{ url_for('index') }}">
-    <i class="fa-solid fa-caret-left fa-2xl"></i>
-  </a>
-</div>
-{% endblock %}{% block errormsg %} {% if response %} {% if response.status ==
-'ERROR' %}
+{% extends 'base.html' %} {% set has_back = True %} {% block errormsg %} {% if
+response %} {% if response.status == 'ERROR' %}
 <p>{{ response.message }}</p>
 {% endif %} {% endif %} {% endblock %} {% block subtitle %}
 <h2 class="subtitle">Register</h2>
