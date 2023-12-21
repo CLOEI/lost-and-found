@@ -133,16 +133,17 @@ def report():
         postId = fb.create_listing(
             title=title, body=body, attachment=attachment, token=token
         )
-        return redirect('/listing/' + postId)
+        return redirect(url_for("listing"))
     elif request.method == "GET":
         return render_template("report.html")
 
-@app.route("/listing", methods=['GET', 'PUT'])
+
+@app.route("/listing", methods=["GET", "PUT"])
 @login_required
 def listing():
-    if request.method == 'PUT':
+    if request.method == "PUT":
         pass
-    elif request.method == 'GET':
+    elif request.method == "GET":
         try:
             posts = fb.get_posts()
 
@@ -158,7 +159,9 @@ def listing():
             )
         except ValueError as e:
             return (
-                render_template("listing", response={"status": "ERROR", "message": str(e)}),
+                render_template(
+                    "listing", response={"status": "ERROR", "message": str(e)}
+                ),
                 400,
             )
 
@@ -175,10 +178,12 @@ def profile():
     print(user)
     return render_template("profile.html", data=user)
 
-@app.route('/profile/<id>')
+
+@app.route("/profile/<id>")
 def user(id):
     user = fb.get_user_info(id)
     return render_template("user.html", data=user)
+
 
 if __name__ == "__main__":
     app.run()
