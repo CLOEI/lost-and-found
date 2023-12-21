@@ -1,16 +1,22 @@
 {% extends 'base.html' %} {% set has_back = True %} {% block errormsg %} {% if
 response %} {% if response.status == 'ERROR' %}
 <p>{{ response.message }}</p>
-{% endif %} {% endif %} {% endblock %}{% block subtitle %}
+{% endif %} {% endif %} {% endblock %} {% block subtitle %}
 <h2 class="subtitle">Items Listing</h2>
 {% endblock %} {% block contents %}
-<div class="scroll-container">
+<div class="scroll-container grid-container">
   {% for post in response.posts %}
   <div class="card">
-    <div class="card-image"></div>
-    <div class="card-contents">
-      <p>{{post}}</p>
-    </div>
+    <a href="post?id={{post.id}}">
+      <div class="card-image">
+        <img src="{{post.attachment_url}}" alt="Image of {{post.title}}" />
+      </div>
+      <div class="card-contents">
+        <h4>{{post.title}}</h4>
+        <p>{{post.body}}</p>
+        <p style="font-size: x-small">{{post.post_owner}}</p>
+      </div>
+    </a>
   </div>
   {% endfor %}
 </div>

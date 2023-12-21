@@ -100,19 +100,20 @@ body a {
   align-items: flex-end;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 32.3% 32.3% 32.3%;
+  gap: 1%;
+}
+
 .h-full {
   height: 100%;
 }
 
 .scroll-container {
-  overflow: scroll;
-  height: 100%;
+  overflow-x: clip;
+  overflow-y: scroll;
   width: 100%;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scroll-container::-webkit-scrollbar {
-  display: none;
 }
 
 /* special styles for specific elements */
@@ -153,6 +154,7 @@ body a {
 .section-container {
   max-width: 100%;
   min-height: 25%;
+  max-height: 60%;
   overflow: hidden;
 }
 
@@ -198,6 +200,30 @@ form .inputfield {
   color: grey;
 }
 
+.card {
+  background: #acacac;
+  width: 100%;
+  aspect-ratio: 4/5;
+}
+
+.card-image {
+  margin: 0;
+  padding: 0;
+  height: 60%;
+}
+
+.card-image img {
+  width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.card-contents h4 {
+  color: #0f0f0f;
+  font-family: "Tilt Warp", sans-serif;
+  font-size: 1.5em;
+}
+
 /* responsive layout */
 .responsive {
   width: 65vw;
@@ -206,18 +232,25 @@ form .inputfield {
   height: 100dvh;
 }
 
-@media screen and (max-width: 768px) {
-  body {
-    font-size: 10px;
-  }
+@media screen and (max-width: 1024px) {
   .responsive {
     width: 80vw;
   }
   .section-container {
     min-height: 15%;
+    max-height: 65%;
     overflow: hidden;
+  }
+  .grid-container {
+    grid-template-columns: 49% 49%;
   }
   .flex-responsive-direction {
     flex-direction: column;
   }
-} /*# sourceMappingURL=index.css.map */
+}
+
+@media screen and (max-width: 640px) {
+  body {
+    font-size: 10px;
+  }
+}
