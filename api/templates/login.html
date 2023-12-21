@@ -29,7 +29,7 @@
           <div class="flex-container flex-col f-justify-center f-align-start">
             <form action="" method="post">
               <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Username</h3>
+                <h3 class="sectiontitle" style="padding: 0">Email</h3>
                 <input
                   type="text"
                   name="email"
@@ -49,6 +49,15 @@
                   class="inputfield"
                   value="{{ request.form.password }}"
                 />
+              </div>
+              <div class="userinput flex-container flex-row">
+                <input
+                  type="checkbox"
+                  name="rememberme"
+                  id="rememberme"
+                  style="margin-right: 1ch"
+                />
+                <p>Remember me</p>
               </div>
               <div
                 class="userinput flex-container flex-nogrow flex-col f-align-end"

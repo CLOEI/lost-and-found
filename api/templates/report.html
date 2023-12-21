@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Lost & Found | Report</title>
-    </head>
-    <body>
-        <h1>report</h1>
-        <a href="/">homepage</a>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost & Found | Report</title>
+  </head>
+  <body>
+    <h1>Report</h1>
+    <a href="/">Homepage</a>
+
+    <form action="/report" method="post" enctype="multipart/form-data">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required /><br /><br />
+
+      <label for="body">Body Text:</label>
+      <textarea id="body" name="body" rows="4" cols="50" required></textarea
+      ><br /><br />
+
+      <label for="attachment">Attachment:</label>
+      <input type="file" id="attachment" name="attachment" /><br /><br />
+
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
 </html>

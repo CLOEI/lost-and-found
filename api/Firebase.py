@@ -1,6 +1,7 @@
-from firebase_admin import initialize_app, credentials, firestore
+from firebase_admin import initialize_app, credentials, firestore, storage
 from google.cloud.firestore_v1.base_query import FieldFilter
 from firebase_admin._auth_utils import EmailAlreadyExistsError
+from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequestKeyError
 from os import getenv
 from jose import jwt
@@ -13,8 +14,9 @@ import json
 class Firebase:
   def __init__(self):
     cred = credentials.Certificate(json.loads(getenv("FIREBASE_CREDENTIALS")))
-    self.app = initialize_app(credential=cred)
+    self.app = initialize_app(credential=cred, options={'storageBucket': 'lost-and-found-19acb.appspot.com'})
     self.firestore = firestore.client(app=self.app)
+    self.storage = storage.bucket(app=self.app)
 
   def register_user(self, email: str, display_name: str, password: str):
     if not all([email, display_name, password]):
@@ -24,7 +26,7 @@ class Firebase:
       raise ValueError('Password must be at least 6 characters long')
 
     users_ref = self.firestore.collection('users')
-    user = users_ref.where(filter=FieldFilter('email', '==', email)).stream()
+    user = users_ref.where(filter=FieldFilter('email', '==', email)).get()
 
     if len(user) > 0:
       raise EmailAlreadyExistsError('Email already exists', email, 400)
@@ -58,7 +60,7 @@ class Firebase:
     if not bcrypt.checkpw(password.encode('utf-8'), user_dict['password'].encode('utf-8')):
       raise ValueError('Incorrect password')
 
-    token = jwt.encode(claims={'uid': user_dict['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() * 3600 if rememberme else time.time() + 3600})
+    token = jwt.encode(claims={'uid': user_dict['uid']}, key=getenv('jwt_private'), algorithm='HS256', headers={'exp': time.time() + (3600 * 24 * 30) if rememberme else time.time() + 3600})
     return {'token': token}
 
   def token_is_valid(self, token: str):
@@ -122,3 +124,24 @@ class Firebase:
     comments_ref = self.firestore.collection('comments')
     comments = comments_ref.where('uid', '==', uid).get()
     return [comment.to_dict() for comment in comments]
+  
+  def create_listing(self, title: str, body: str, attachment: FileStorage):
+    if not all([title, body]):
+      raise BadRequestKeyError
+
+    attachment_url = self.upload_file(attachment)
+    posts_ref = self.firestore.collection('posts')
+    post_id = str(uuid.uuid4())
+    posts_ref.add({
+      'id': post_id,
+      'title': title,
+      'body': body,
+      'attachment_url': attachment_url
+    })
+    return post_id
+
+  def upload_file(self, file: FileStorage):
+    blob = self.storage.blob(file.filename)
+    blob.upload_from_file(file.stream)
+    blob.make_public()
+    return blob.public_url
