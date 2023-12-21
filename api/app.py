@@ -91,10 +91,13 @@ def report():
     elif request.method == 'GET':
         return render_template("report.html")
 
-@app.route("/listing")
+@app.route("/listing", methods=['GET', 'PUT'])
 @login_required
 def listing():
-    return render_template("listing.html")
+    if request.method == 'PUT':
+        pass
+    elif request.method == 'GET':
+        return render_template("listing.html")
 
 @app.route("/listing/<id>")
 def post(id):
@@ -106,6 +109,11 @@ def profile():
     user = fb.get_user_info(fb.get_uid_from_token(request.cookies.get('token')))
     print(user)
     return render_template("profile.html", data=user)
+
+@app.route('/profile/<id>')
+def user(id):
+    user = fb.get_user_info(id)
+    return render_template("user.html", data=user)
 
 if __name__ == "__main__":
     app.run()
