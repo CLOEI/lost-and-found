@@ -93,6 +93,9 @@ body a {
 .f-justify-center {
   justify-content: center;
 }
+.f-justify-start {
+  justify-content: flex-start;
+}
 
 .f-align-center {
   align-items: center;
