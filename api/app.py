@@ -85,7 +85,8 @@ def report():
         title = request.form['title']
         body = request.form['body']
         attachment = request.files['attachment']
-        postId = fb.create_listing(title=title, body=body, attachment=attachment)
+        token = request.cookies.get('token')
+        postId = fb.create_listing(title=title, body=body, attachment=attachment, token=token)
         return redirect(url_for('listing', id=postId))
     elif request.method == 'GET':
         return render_template("report.html")
@@ -93,10 +94,11 @@ def report():
 @app.route("/listing")
 @login_required
 def listing():
-    if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        return render_template("listing.html")
+    return render_template("listing.html")
+
+@app.route("/listing/<id>")
+def post():
+    return render_template("post.html")
 
 if __name__ == "__main__":
     app.run()
