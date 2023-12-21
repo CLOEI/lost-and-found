@@ -131,12 +131,14 @@ class Firebase:
 
     def get_posts_by_uid(self, uid: str):
         posts_ref = self.firestore.collection("posts")
-        posts = posts_ref.where("uid", "==", uid).get()
+        posts = posts_ref.where(filter=FieldFilter("post_owner", "==", uid)).get()
         return [post.to_dict() for post in posts]
 
     def get_comments_by_post_id(self, post_id: str):
         comments_ref = self.firestore.collection("comments")
-        comments = comments_ref.where("post_id", "==", post_id).get()
+        comments = comments_ref.where(
+            filter=FieldFilter("post_id", "==", post_id)
+        ).get()
         nested_comments = []
 
         for comment in comments:
