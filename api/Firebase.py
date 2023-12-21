@@ -128,11 +128,12 @@ class Firebase:
   def create_listing(self, title: str, body: str, attachment: FileStorage, token: str):
     if not all([title, body]):
       raise BadRequestKeyError
-
-    attachment_url = self.upload_file(attachment)
+    
+    attachment_url = self.upload_file(attachment) if attachment else None
+    
     posts_ref = self.firestore.collection('posts')
     # from jwt decode it and get the uid
-    uid = jwt.decode(token, getenv('jwt_private'), algorithms='HS256')['uid']
+    uid = jwt.decode(token, getenv('JWT_PRIVATE'), algorithms='HS256')['uid']
     post_id = str(uuid.uuid4())
     posts_ref.add({
       'id': post_id,
