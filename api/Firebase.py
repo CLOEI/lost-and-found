@@ -111,7 +111,7 @@ class Firebase:
 
     def get_post_by_id(self, post_id: str):
         posts_ref = self.firestore.collection("posts")
-        post = posts_ref.document(post_id).get()
+        post = posts_ref.where('id', '==', post_id).get()
         return post.to_dict()
 
     def get_posts_by_uid(self, uid: str):
