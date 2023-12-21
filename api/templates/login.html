@@ -19,6 +19,14 @@
   </head>
   <body>
     <div class="responsive">
+      <div
+        class="backbutton"
+        style="position: absolute; top: 4ch; font-size: 20px; color: white"
+      >
+        <a href="{{ url_for('index') }}">
+          <i class="fa-solid fa-caret-left fa-2xl"></i>
+        </a>
+      </div>
       <div class="flex-container flex-nowrap flex-col f-justify-center h-full">
         {% if response %} {% if response.status == 'ERROR' %}
         <p>{{ response.message }}</p>

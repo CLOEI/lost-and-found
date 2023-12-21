@@ -19,6 +19,14 @@
   </head>
   <body>
     <div class="responsive">
+      <div
+        class="backbutton"
+        style="position: absolute; top: 4ch; font-size: 20px; color: white"
+      >
+        <a href="{{ url_for('index') }}">
+          <i class="fa-solid fa-caret-left fa-2xl"></i>
+        </a>
+      </div>
       <div class="flex-container flex-nowrap flex-col f-justify-center h-full">
         {% if response %} {% if response.status == 'ERROR' %}
         <p>{{ response.message }}</p>
@@ -33,7 +41,9 @@
           <div class="flex-container flex-col f-justify-center f-align-start">
             <form action="" method="post">
               <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Email</h3>
+                <label for="email" class="sectiontitle" style="padding: 0">
+                  Email
+                </label>
                 <input
                   type="text"
                   name="email"
@@ -43,7 +53,9 @@
                 />
               </div>
               <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Username</h3>
+                <label for="username" class="sectiontitle" style="padding: 0">
+                  Username
+                </label>
                 <input
                   type="text"
                   name="username"
@@ -55,7 +67,9 @@
                 />
               </div>
               <div class="userinput">
-                <h3 class="sectiontitle" style="padding: 0">Password</h3>
+                <label for="password" class="sectiontitle" style="padding: 0">
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
