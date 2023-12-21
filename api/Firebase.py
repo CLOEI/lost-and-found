@@ -94,7 +94,7 @@ class Firebase:
 
     def get_user_info(self, uid: str):
         users_ref = self.firestore.collection("users")
-        user = users_ref.where('id', '==', uid).get().to_dict()
+        user = users_ref.where('id', '==', uid).get()[0].to_dict()
 
         if user is None:
             raise ValueError("User not found")
