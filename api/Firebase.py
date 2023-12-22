@@ -190,6 +190,17 @@ class Firebase:
         )
         return post_id
     
+    def delete_listing(self, post_id: str, token: str):
+        decoded = self.get_decoded_token(token)
+        posts_ref = self.firestore.collection("posts")
+        post = posts_ref.where("id", '==', post_id).get()
+        post_dict = post.to_dict()
+        if post_dict['post_owner_uid'] != decoded['uid']:
+            raise ValueError("You are not the owner of this post")
+
+        posts_ref.where("id", '==', post_id).delete()
+        return True
+
     def update_listing(
         self, title: str, body: str, attachment: FileStorage, token: str, post_id: str
     ):
