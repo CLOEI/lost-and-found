@@ -243,7 +243,7 @@ def post_delete(id):
         try:
             token = request.cookies.get("token")
             fb.delete_listing(id, token)
-            return redirect("listing")
+            return redirect(url_for("listing"))
         except ValueError as e:
             return (
                 render_template("editpost.html", response={"status": "ERROR", "message": str(e)}),
