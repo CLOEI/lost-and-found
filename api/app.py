@@ -200,8 +200,8 @@ def post(id):
     )
 
 
-@app.route("/listing/<id>/edit", methods=["GET", "PUT", "DELETE"])
-def post(id):
+@app.route("/listing/<id>/edit", methods=["PUT", "DELETE"])
+def post_edit(id):
     if request.method == "PUT":
         try:
             title = request.form["title"]
@@ -239,12 +239,6 @@ def post(id):
                 ),
                 400,
             )
-    elif request.method == "GET":
-        post = fb.get_post_by_id(id)
-        return (
-            render_template("editpost.html", response={"status": "OK", "post": post}),
-            400,
-        )
 
 
 @app.route("/profile")
