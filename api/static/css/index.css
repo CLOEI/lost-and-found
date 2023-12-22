@@ -378,6 +378,12 @@ form .inputfield {
   color: black;
 }
 
+.profile-interactions .profile-data {
+  max-height: 60%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 /* responsive layout */
 .responsive {
   width: 65vw;
