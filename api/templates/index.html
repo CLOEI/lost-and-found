@@ -1,4 +1,9 @@
-{% extends 'base.html' %} {% block contents %}
+{% extends 'base.html' %} {% block errormsg %} {% if response %} {% if
+response.status == 'ERROR' %}
+<p>{{ response.message }}</p>
+{% elif response.status == 'ALERT' %}
+<p style="color: greenyellow">{{ response.message }}</p>
+{% endif %} {% endif %} {% endblock %}{% block contents %}
 <div
   class="flex-container flex-row f-justify-around f-align-center lost section"
 >
