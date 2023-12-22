@@ -148,6 +148,9 @@ class Firebase:
                 parent_comment = comments_ref.where("id", '==', parent_comment_id).get()
                 parent_comment_dict = parent_comment.to_dict()
 
+                if not parent_comment:
+                    continue
+
                 if "comments" not in parent_comment_dict:
                     parent_comment_dict["comments"] = []
 
