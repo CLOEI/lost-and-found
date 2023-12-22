@@ -32,10 +32,19 @@ form label {
   font-family: "Tilt Warp", sans-serif;
   font-size: 1.5em;
 }
-body p,
-body a {
+p {
   color: white;
   font-family: "Sarabun", sans-serif;
+}
+
+a {
+  color: #cacaca;
+  font-family: "Sarabun", sans-serif;
+}
+
+a,
+button {
+  cursor: pointer;
 }
 
 /* presudo-tailwind cuz it's so much nicer than css */
