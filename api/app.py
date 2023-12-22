@@ -169,7 +169,7 @@ def utility_processor():
     return dict(get_user_from_id=get_user_from_id)
 
 
-@app.route("/listing/<id>", methods=["GET", "PUT"])
+@app.route("/listing/<id>", methods=["GET", "PUT", "DELETE"])
 def post(id):
     if request.method == "PUT":
         try:
@@ -189,6 +189,18 @@ def post(id):
                 ),
                 400,
             )
+        except ValueError as e:
+            return (
+                render_template(
+                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
+    elif request.method == "DELETE":
+        try:
+            token = request.cookies.get("token")
+            fb.delete_listing(id, token)
+            return redirect('/listing')
         except ValueError as e:
             return (
                 render_template(
