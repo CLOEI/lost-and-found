@@ -185,7 +185,6 @@ def post(id):
 @login_required
 def profile():
     user = fb.get_user_info(fb.get_decoded_token(request.cookies.get("token"))['uid'])
-    print(user)
     return render_template("account.html", data=user)
 
 

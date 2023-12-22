@@ -131,7 +131,7 @@ class Firebase:
 
     def get_posts_by_uid(self, uid: str):
         posts_ref = self.firestore.collection("posts")
-        posts = posts_ref.where(filter=FieldFilter("post_owner", "==", uid)).get()
+        posts = posts_ref.where(filter=FieldFilter("post_owner_uid", "==", uid)).get()
         return [post.to_dict() for post in posts]
 
     def get_comments_by_post_id(self, post_id: str):
