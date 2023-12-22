@@ -46,14 +46,15 @@ def register():
             )
 
             resp = make_response(
+                redirect(url_for(next)),
                 {
                     "status": "OK",
                     "message": "Registered successfully!",
                     "token": data["token"],
-                }
+                },
             )
             resp.set_cookie("token", data["token"])
-            return redirect(url_for(next), Response=resp)
+            return resp
         except BadRequestKeyError:
             return (
                 render_template(
@@ -96,7 +97,14 @@ def login():
             rememberme = True if request.form.get("rememberme") else False
             data = fb.login_user(email=email, password=password, rememberme=rememberme)
 
-            resp = make_response(redirect(url_for(next)))
+            resp = make_response(
+                redirect(url_for(next)),
+                {
+                    "status": "OK",
+                    "message": "Registered successfully!",
+                    "token": data["token"],
+                },
+            )
             resp.set_cookie("token", data["token"])
             return resp
         except InvalidArgumentError as e:
@@ -180,7 +188,7 @@ def post(id):
             postId = fb.update_listing(
                 title=title, body=body, attachment=attachment, token=token
             )
-            return redirect('/listing/' + postId)
+            return redirect("/listing/" + postId)
         except BadRequestKeyError:
             return (
                 render_template(
@@ -219,7 +227,7 @@ def post(id):
 @app.route("/profile")
 @login_required
 def profile():
-    user = fb.get_user_info(fb.get_decoded_token(request.cookies.get("token"))['uid'])
+    user = fb.get_user_info(fb.get_decoded_token(request.cookies.get("token"))["uid"])
     return render_template("account.html", data=user)
 
 
@@ -228,13 +236,14 @@ def user(id):
     user = fb.get_user_info(id)
     return render_template("profile.html", data=user)
 
-@app.route('/listing/<id>/comment', methods=['POST'])
+
+@app.route("/listing/<id>/comment", methods=["POST"])
 def comment(id):
     try:
-        body = request.form['comment']
-        token = request.cookies.get('token')
+        body = request.form["comment"]
+        token = request.cookies.get("token")
         fb.create_comment(body=body, token=token, post_id=id)
-        return redirect('/listing/' + id)
+        return redirect("/listing/" + id)
     except BadRequestKeyError:
         return (
             render_template(
@@ -251,13 +260,14 @@ def comment(id):
             400,
         )
 
-@app.route('/listing/<id>/comment/<comment_id>', methods=['POST'])
+
+@app.route("/listing/<id>/comment/<comment_id>", methods=["POST"])
 def reply(id, comment_id):
     try:
-        body = request.form['comment']
-        token = request.cookies.get('token')
+        body = request.form["comment"]
+        token = request.cookies.get("token")
         fb.create_comment(body=body, token=token, post_id=id, reply_to=comment_id)
-        return redirect('/listing/' + id)
+        return redirect("/listing/" + id)
     except BadRequestKeyError:
         return (
             render_template(
@@ -273,6 +283,7 @@ def reply(id, comment_id):
             ),
             400,
         )
+
 
 if __name__ == "__main__":
     app.run()
