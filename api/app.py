@@ -194,11 +194,18 @@ def post(id):
 
 @app.route("/listing/<id>/edit", methods=["GET", "POST"])
 def post_edit(id):
+    unedited_post = fb.get_post_by_id(id)
     if request.method == "POST":
         try:
             title = request.form["title"]
-            body = request.form["body"]
-            attachment = request.files["attachment"]
+            body = (
+                request.form["body"] if request.form["body"] else unedited_post["body"]
+            )
+            attachment = (
+                request.files["attachment"]
+                if request.files["attachment"]
+                else unedited_post["attachment_url"]
+            )
             token = request.cookies.get("token")
             postId = fb.update_listing(
                 title=title, body=body, attachment=attachment, token=token, post_id=id

@@ -10,6 +10,7 @@ import uuid
 import time
 import bcrypt
 import json
+from typing import Union
 
 
 class Firebase:
@@ -215,12 +216,21 @@ class Firebase:
         return True
 
     def update_listing(
-        self, title: str, body: str, attachment: FileStorage, token: str, post_id: str
+        self,
+        title: str,
+        body: str,
+        attachment: Union[str, FileStorage],
+        token: str,
+        post_id: str,
     ):
         if not all([title, body]):
             raise BadRequestKeyError
 
-        attachment_url = self.upload_file(attachment) if attachment else None
+        attachment_url = (
+            self.upload_file(attachment)
+            if type(attachment) is FileStorage
+            else attachment
+        )
 
         posts_ref = self.firestore.collection("posts")
 
