@@ -291,7 +291,7 @@ form .inputfield {
   height: 100%;
   object-fit: cover;
 }
-.post-display .post-comments {
+.post-display .post-commentsystem {
   grid-column: 3;
   grid-row: 1 / span 3;
   overflow-x: hidden;
@@ -310,14 +310,14 @@ form .inputfield {
   border: none;
   border-radius: 6px;
 }
-.post-display .post-comments form button {
+.post-display .post-commentsystem form button {
   width: 1.5em;
   height: 1.5em;
 }
-.post-display .post-comments form button i {
+.post-display .post-commentsystem form button i {
   transform: translate(-0.15ch, -0.1em);
 }
-.post-display .post-comments .commentbox {
+.post-display .post-commentsystem .commentbox {
   width: 82.5%;
 }
 .editbutton {
@@ -347,7 +347,7 @@ form .inputfield {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column: 2;
-  grid-row: 1;
+  grid-row: 2;
 }
 .post-edit .userinput.imageupload .pic-forminput {
   grid-column: 1;
@@ -357,9 +357,8 @@ form .inputfield {
   grid-column: 2;
   grid-row: 1 / span 2;
 }
-.post-edit .userinput.imageupload {
-  grid-column: 2;
-  grid-row: 2;
+.post-edit .userinput.imageupload .pic-image img {
+  max-width: 30vw;
 }
 .post-edit .userinput.submitbtn {
   grid-column: 2;
@@ -447,9 +446,13 @@ form .inputfield {
     height: 100%;
     object-fit: cover;
   }
-  .post-display .post-comments {
+  .post-display .post-commentsystem {
     grid-column: 1 / span 2;
     grid-row: 4 / span 3;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+  .post-display .post-comments {
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -462,21 +465,36 @@ form .inputfield {
   body {
     font-size: 10px;
   }
-  .post-display .post-comments .add-comment-button {
+  .post-display .post-commentsystem .add-comment-button {
     transform: translate(-1em, -1ch);
   }
-  .post-display .post-comments form button {
+  .post-display .post-commentsystem form button {
     width: 2.25em;
     height: 2.25em;
   }
-  .post-display .post-comments form button i {
+  .post-display .post-commentsystem form button i {
     font-size: 1.25em;
     transform: translate(-0.15ch, 0.2em);
   }
 }
 
 @media screen and (min-width: 640px) and (max-width: 1024px) {
-  .post-display .post-comments .commentbox {
+  .post-display .post-commentsystem .commentbox {
     width: 92.5%;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .post-edit .userinput.imageupload {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+  }
+  .post-edit .userinput.imageupload .pic-forminput {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+  .post-edit .userinput.imageupload .pic-image {
+    grid-column: 1 / span 2;
+    grid-row: 2 / span 4;
   }
 }

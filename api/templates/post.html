@@ -47,7 +47,7 @@ get_current_uid() %}
       alt="Image of {{response.post.title}}"
     />
   </div>
-  <div class="post-comments">
+  <div class="post-commentsystem">
     <form
       action="/listing/{{ response.post.id }}/comment"
       method="POST"
@@ -83,12 +83,14 @@ get_current_uid() %}
     <h3 class="sectiontitle" style="padding: 0">
       {{ response.post.comments|length }} Comments
     </h3>
-    {% for c in response.post.comments %}
-    <div class="comment-card flex-container flex-col">
-      <a href="/profile/{{c.uid}}">{{ c.display_name }}</a>
-      <p>{{ c.body }}</p>
+    <div class="post-comments">
+      {% for c in response.post.comments %}
+      <div class="comment-card flex-container flex-col">
+        <a href="/profile/{{c.uid}}">{{ c.display_name }}</a>
+        <p>{{ c.body }}</p>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
   {% endblock %}
 </div>
