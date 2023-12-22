@@ -136,7 +136,7 @@ def report():
         return render_template("report.html")
 
 
-@app.route("/listing", methods=["GET", "PUT"])
+@app.route("/listing")
 @login_required
 def listing():
     try:
@@ -215,6 +215,29 @@ def profile():
 def user(id):
     user = fb.get_user_info(id)
     return render_template("profile.html", data=user)
+
+@app.route('/listing/<id>/comment', methods=['POST'])
+def comment(id):
+    try:
+        body = request.form['comment']
+        token = request.cookies.get('token')
+        fb.create_comment(body=body, token=token, post_id=id)
+        return redirect('/listing/' + id)
+    except BadRequestKeyError:
+        return (
+            render_template(
+                "listing.html",
+                response={"status": "ERROR", "message": "All fields are required!"},
+            ),
+            400,
+        )
+    except ValueError as e:
+        return (
+            render_template(
+                "listing.html", response={"status": "ERROR", "message": str(e)}
+            ),
+            400,
+        )
 
 
 if __name__ == "__main__":
