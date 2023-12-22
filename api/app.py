@@ -158,7 +158,7 @@ def report():
         body = request.form["body"]
         attachment = request.files["attachment"]
         token = request.cookies.get("token")
-        fb.create_listing(
+        postId = fb.create_listing(
             title=title, body=body, attachment=attachment, token=token
         )
         return redirect("/listing/" + postId)
@@ -200,7 +200,7 @@ def post(id):
     )
 
 
-@app.route("/listing/<id>/edit", methods=["PUT", "DELETE"])
+@app.route("/listing/<id>/edit", methods=["GET", "PUT", "DELETE"])
 def post_edit(id):
     if request.method == "PUT":
         try:
@@ -239,6 +239,12 @@ def post_edit(id):
                 ),
                 400,
             )
+    elif request.method == "GET":
+        post = fb.get_post_by_id(id)
+        return (
+            render_template("editpost.html", response={"status": "OK", "post": post}),
+            400,
+        )
 
 
 @app.route("/profile")
