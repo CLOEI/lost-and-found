@@ -344,6 +344,19 @@ form .inputfield {
   grid-row: 3;
 }
 
+.post-comments .comment-card {
+  background: #f0f0f0;
+  margin: 0.5ch;
+  padding: 1ch;
+}
+
+.post-comments .comment-card a {
+  color: #7a7ae0;
+}
+.post-comments .comment-card p {
+  color: black;
+}
+
 /* responsive layout */
 .responsive {
   width: 65vw;

@@ -42,18 +42,55 @@
     />
   </div>
   <div class="post-comments">
-    <form action="/listing/{{ response.post.id }}/comment" method="POST">
-      <input type="text" name="comment" placeholder="Add a comment" />
-      <button type="submit">Post Comment</button>
+    <form
+      action="/listing/{{ response.post.id }}/comment"
+      method="POST"
+      class="flex-container flex-row f-align-center f-justify-between"
+    >
+      <div class="userinput" style="width: 100%">
+        <input
+          type="text"
+          name="comment"
+          placeholder="Add a comment"
+          style="
+            border: none;
+            line-height: 1.25em;
+            height: 2.25em;
+            width: 98%;
+            padding: 0 0.5ch;
+          "
+        />
+      </div>
+      <div
+        class="userinput"
+        style="width: 2em; height: 1.5em; transform: translateY(-0.2em)"
+      >
+        <button
+          type="submit"
+          class="button"
+          style="
+            line-height: 1.25em;
+            border: none;
+            border-radius: 50%;
+            width: 1.5em;
+            height: 1.5em;
+          "
+        >
+          <i
+            class="fa-solid fa-paper-plane fa-sm"
+            style="transform: translate(-0.15ch, -0.1em)"
+          ></i>
+        </button>
+      </div>
     </form>
     <h3 class="sectiontitle" style="padding: 0">
       {{ response.post.comments|length }} Comments
     </h3>
     {% for c in response.post.comments %}
-    <p>
+    <div class="comment-card flex-container flex-col">
       <a href="/profile/{{c.uid}}">{{ c.display_name }}</a>
-    </p>
-    <p>{{ c.body }}</p>
+      <p>{{ c.body }}</p>
+    </div>
     {% endfor %}
   </div>
   {% endblock %}
