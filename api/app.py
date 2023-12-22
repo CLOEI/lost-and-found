@@ -170,8 +170,10 @@ def listing():
 def utility_processor():
     def get_username_from_id(id):
         return fb.get_username_only(id)
+    def get_user_from_id(id):
+        return fb.get_user_info(id)
 
-    return dict(get_username_from_id=get_username_from_id)
+    return dict(get_username_from_id=get_username_from_id, get_user_from_id=get_user_from_id)
 
 
 @app.route("/listing/<id>")
