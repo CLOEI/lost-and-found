@@ -7,17 +7,15 @@ response.status == 'ERROR' %}
 <div
   class="flex-container flex-row f-justify-around f-align-center lost section"
 >
-  <h3 class="sectiontitle" style="text-align: left">I've lost something!</h3>
-  <a class="button" id="report_lost" href="report" style="text-align: center">
-    Create report
-  </a>
+  <h3 class="sectiontitle" style="text-align: left">I found something!</h3>
+  <a class="button" href="report" style="text-align: center"> Create report </a>
 </div>
 <div
   class="flex-container flex-row-rev f-justify-around f-align-center found section"
 >
-  <h3 class="sectiontitle" style="text-align: right">I found something!</h3>
-  <a class="button" id="browse_lost" href="/listing" style="text-align: center">
-    Find its owner
+  <h3 class="sectiontitle" style="text-align: right">I lost something!</h3>
+  <a class="button" href="listing" style="text-align: center">
+    Browse database
   </a>
 </div>
 {% endblock %}

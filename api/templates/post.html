@@ -36,6 +36,11 @@ get_current_uid() %}
       </p>
     </div>
   </div>
+  <div class="claimbutton">
+    <form action="" class="flex-container f-justify-center f-align-center">
+      <button class="button" type="submit">Claim item</button>
+    </form>
+  </div>
   <div class="post-image">
     <img
       src="{{response.post.attachment_url}}"
@@ -48,7 +53,7 @@ get_current_uid() %}
       method="POST"
       class="flex-container flex-row f-align-center f-justify-between"
     >
-      <div class="userinput" style="width: 100%">
+      <div class="userinput commentbox">
         <input
           type="text"
           name="comment"
@@ -57,30 +62,21 @@ get_current_uid() %}
             border: none;
             line-height: 1.25em;
             height: 2.25em;
-            width: 98%;
+            width: 100%;
             padding: 0 0.5ch;
           "
         />
       </div>
       <div
-        class="userinput"
-        style="width: 2em; height: 1.5em; transform: translateY(-0.2em)"
+        class="userinput add-comment-button"
+        style="width: 2em; height: 1.5em; translate: 0 -0.2em"
       >
         <button
           type="submit"
           class="button"
-          style="
-            line-height: 1.25em;
-            border: none;
-            border-radius: 50%;
-            width: 1.5em;
-            height: 1.5em;
-          "
+          style="line-height: 1.25em; border: none; border-radius: 50%"
         >
-          <i
-            class="fa-solid fa-paper-plane fa-sm"
-            style="transform: translate(-0.15ch, -0.1em)"
-          ></i>
+          <i class="fa-solid fa-paper-plane fa-sm"></i>
         </button>
       </div>
     </form>

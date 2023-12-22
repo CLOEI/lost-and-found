@@ -17,7 +17,9 @@
       </h3>
       <div class="flex-container flex-col">
         {% for p in data.posts %}
-        <a href="listing/{{p.id}}">{{ p.title }}</a>
+        <div class="comment-card flex-container flex-col">
+          <a href="listing/{{p.id}}">{{ p.title }}</a>
+        </div>
         {% endfor %}
       </div>
     </div>
@@ -25,9 +27,6 @@
       <h3 class="sectiontitle" style="padding: 0">
         {{ data.comments|length }} Comments
       </h3>
-      {% for c in data.comments %}
-      <p>{{ c }}</p>
-      {% endfor %}
     </div>
   </div>
 </div>

@@ -297,7 +297,29 @@ form .inputfield {
   overflow-x: hidden;
   overflow-y: auto;
 }
-
+.post-display .claimbutton {
+  grid-column: 1;
+  grid-row: 2 / span 2;
+  width: 100%;
+}
+.post-display .claimbutton form {
+  height: 100%;
+}
+.post-display .claimbutton form button {
+  height: 2.5em;
+  border: none;
+  border-radius: 6px;
+}
+.post-display .post-comments form button {
+  width: 1.5em;
+  height: 1.5em;
+}
+.post-display .post-comments form button i {
+  transform: translate(-0.15ch, -0.1em);
+}
+.post-display .post-comments .commentbox {
+  width: 82.5%;
+}
 .editbutton {
   height: 3.5em;
   position: absolute;
@@ -344,16 +366,16 @@ form .inputfield {
   grid-row: 3;
 }
 
-.post-comments .comment-card {
+.comment-card {
   background: #f0f0f0;
   margin: 0.5ch;
   padding: 1ch;
 }
 
-.post-comments .comment-card a {
+.comment-card a {
   color: #7a7ae0;
 }
-.post-comments .comment-card p {
+.comment-card p {
   color: black;
 }
 
@@ -439,5 +461,22 @@ form .inputfield {
 @media screen and (max-width: 640px) {
   body {
     font-size: 10px;
+  }
+  .post-display .post-comments .add-comment-button {
+    transform: translate(-1em, -1ch);
+  }
+  .post-display .post-comments form button {
+    width: 2.25em;
+    height: 2.25em;
+  }
+  .post-display .post-comments form button i {
+    font-size: 1.25em;
+    transform: translate(-0.15ch, 0.2em);
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 1024px) {
+  .post-display .post-comments .commentbox {
+    width: 92.5%;
   }
 }
