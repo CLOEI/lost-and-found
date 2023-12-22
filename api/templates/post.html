@@ -4,7 +4,8 @@
 <p>{{ response.message }}</p>
 {% endif %} {% endif %} {% endblock %} {% block subtitle %}
 <h2 class="subtitle">Lost Item</h2>
-{% endblock %} {% block contents %} {% if True %}
+{% endblock %} {% block contents %} {% if response.post.post_owner_uid ==
+get_current_uid() %}
 <div
   class="editbutton flex-container flex-noshrink f-justify-end f-align-center"
   style="color: white"
