@@ -1,7 +1,8 @@
 {% extends 'base.html' %} {% set has_back = True %} {% set return_destination =
-'listing' %} {% block errormsg %} {% if response %}
+'listing' %} {% block errormsg %} {% if response %} {% if response.status ==
+'ERROR' %}
 <p>{{ response.message }}</p>
-{% endif %} {% endblock %} {% block subtitle %}
+{% endif %} {% endif %} {% endblock %} {% block subtitle %}
 <h2 class="subtitle">Edit Post</h2>
 {% endblock %} {% block contents %}
 <div class="post-title">
