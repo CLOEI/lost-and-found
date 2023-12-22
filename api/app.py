@@ -192,7 +192,7 @@ def post(id):
     )
 
 
-@app.route("/listing/<id>/edit", methods=["GET", "POST", "DELETE"])
+@app.route("/listing/<id>/edit", methods=["GET", "POST"])
 def post_edit(id):
     if request.method == "POST":
         try:
@@ -240,6 +240,22 @@ def post_edit(id):
                 ),
                 400,
             )
+        except ValueError as e:
+            return (
+                render_template(
+                    "editpost.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
+
+
+@app.route("/listing/<id>/delete", methods=["POST"])
+def post_delete(id):
+    if request.method == "POST":
+        try:
+            token = request.cookies.get("token")
+            fb.delete_listing(id, token)
+            return redirect("/listing")
         except ValueError as e:
             return (
                 render_template(

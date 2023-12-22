@@ -252,24 +252,58 @@ form .inputfield {
   padding: 0 1ch;
 }
 
-.card-contents h4 {
+.card-contents .post-title {
   color: #0f0f0f;
   font-family: "Tilt Warp", sans-serif;
   font-size: 1.5em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-contents .post-description {
   font-size: 0.75em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-contents .post-author {
   font-size: 0.5em;
 }
 
-.post-image img {
+.post-display {
+  height: 95%;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  overflow: hidden;
+}
+.post-display .post-info {
+  grid-column: 1;
+  grid-row: 1;
+}
+.post-display .post-image {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+}
+.post-display .post-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.post-display .post-comments {
+  grid-column: 3;
+  grid-row: 1 / span 3;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.editbutton {
+  height: 3.5em;
+  position: absolute;
+  right: 17.5vw;
+  top: 20vh;
+  font-size: 1.25em;
 }
 
 .post-edit {
@@ -291,7 +325,7 @@ form .inputfield {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-row: 1;
 }
 .post-edit .userinput.imageupload .pic-forminput {
   grid-column: 1;
@@ -300,6 +334,10 @@ form .inputfield {
 .post-edit .userinput.imageupload .pic-image {
   grid-column: 2;
   grid-row: 1 / span 2;
+}
+.post-edit .userinput.imageupload {
+  grid-column: 2;
+  grid-row: 2;
 }
 .post-edit .userinput.submitbtn {
   grid-column: 2;
@@ -356,6 +394,32 @@ form .inputfield {
   }
   .flex-responsive-direction {
     flex-direction: column;
+  }
+  .post-display {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+  .post-display .post-info {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .post-display .post-image {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+  .post-display .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .post-display .post-comments {
+    grid-column: 1 / span 2;
+    grid-row: 4 / span 3;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .editbutton {
+    right: 10vw;
   }
 }
 

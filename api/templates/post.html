@@ -4,33 +4,44 @@
 <p>{{ response.message }}</p>
 {% endif %} {% endif %} {% endblock %} {% block subtitle %}
 <h2 class="subtitle">Lost Item</h2>
-{% endblock %} {% block contents %}
+{% endblock %} {% block contents %} {% if True %}
 <div
-  class="grid-container"
-  style="grid-template-columns: auto auto; grid-template-rows: auto auto auto"
+  class="editbutton flex-container flex-noshrink f-justify-end f-align-center"
+  style="color: white"
 >
-  <div class="post-title" style="grid-column: 1 / span 1; grid-row: 1 / span 1">
-    <h3 class="sectiontitle" style="padding: 0">{{ response.post.title }}</h3>
+  <a href="{{ response.post.id }}/edit"
+    ><i class="fa-solid fa-pen-to-square fa-2xl"></i
+  ></a>
+</div>
+{% endif %}
+<div class="grid-container post-display">
+  <div class="post-info flex-container flex-col f-justify-between">
+    <div class="post-meta">
+      <div class="post-title">
+        <h3 class="sectiontitle" style="padding: 0">
+          {{ response.post.title }}
+        </h3>
+      </div>
+      <div class="post-description">
+        <p>{{ response.post.body }}</p>
+      </div>
+    </div>
+    <div class="post-author">
+      <p>
+        posted by
+        <a href="/profile/{{ response.post.post_owner_uid }}">
+          {{ response.post.post_owner_name }}
+        </a>
+      </p>
+    </div>
   </div>
-  <div class="post-info" style="grid-column: 1 / span 1; grid-row: 2 / span 2">
-    <p class="post-description">{{ response.post.body }}</p>
-    <p class="post-author">
-      posted by
-      <a href="/profile/{{ response.post.post_owner_uid }}">
-        {{ response.post.post_owner_name }}
-      </a>
-    </p>
-  </div>
-  <div class="post-image" style="grid-column: 2 / span 1; grid-row: 1 / span 3">
+  <div class="post-image">
     <img
       src="{{response.post.attachment_url}}"
       alt="Image of {{response.post.title}}"
     />
   </div>
-  <div
-    class="post-comments"
-    style="grid-column: 1 / span 1; grid-row: 3 / span 1"
-  >
+  <div class="post-comments">
     <form action="/listing/{{ response.post.id }}/comment" method="POST">
       <input type="text" name="comment" placeholder="Add a comment" />
       <button type="submit">Post Comment</button>

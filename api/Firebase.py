@@ -119,7 +119,9 @@ class Firebase:
 
     def get_posts(self):
         posts_ref = self.firestore.collection("posts")
-        posts = posts_ref.order_by("post_date", direction=firestore.Query.DESCENDING).get()
+        posts = posts_ref.order_by(
+            "post_date", direction=firestore.Query.DESCENDING
+        ).get()
         return [post.to_dict() for post in posts]
 
     def get_post_by_id(self, post_id: str):
@@ -137,9 +139,11 @@ class Firebase:
 
     def get_comments_by_post_id(self, post_id: str):
         comments_ref = self.firestore.collection("comments")
-        comments = comments_ref.where(
-            filter=FieldFilter("post_id", "==", post_id)
-        ).order_by("comment_date", direction=firestore.Query.DESCENDING).get()
+        comments = (
+            comments_ref.where(filter=FieldFilter("post_id", "==", post_id))
+            .order_by("comment_date", direction=firestore.Query.DESCENDING)
+            .get()
+        )
         nested_comments = []
 
         for comment in comments:
@@ -166,9 +170,12 @@ class Firebase:
         return nested_comments
 
     def get_comments_by_uid(self, uid: str):
-
         comments_ref = self.firestore.collection("comments")
-        comments = comments_ref.where("uid", "==", uid).order_by("comment_date", direction=firestore.Query.DESCENDING).get()
+        comments = (
+            comments_ref.where("uid", "==", uid)
+            .order_by("comment_date", direction=firestore.Query.DESCENDING)
+            .get()
+        )
         return [comment.to_dict() for comment in comments]
 
     def create_listing(
@@ -199,7 +206,7 @@ class Firebase:
     def delete_listing(self, post_id: str, token: str):
         decoded = self.get_decoded_token(token)
         posts_ref = self.firestore.collection("posts")
-        post = posts_ref.where("id", "==", post_id).get()
+        post = posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0]
         post_dict = post.to_dict()
         if post_dict["post_owner_uid"] != decoded["uid"]:
             raise ValueError("You are not the owner of this post")
@@ -223,15 +230,15 @@ class Firebase:
 
         for doc in docs:
             doc.reference.update(
-            {
-                "title": title,
-                "body": body,
-                "post_owner_uid": decoded["uid"],
-                "post_owner_name": decoded["display_name"],
-                "post_date": time.time(),
-                "attachment_url": attachment_url,
-            }
-        )
+                {
+                    "title": title,
+                    "body": body,
+                    "post_owner_uid": decoded["uid"],
+                    "post_owner_name": decoded["display_name"],
+                    "post_date": time.time(),
+                    "attachment_url": attachment_url,
+                }
+            )
 
         return post_id
 
