@@ -119,7 +119,7 @@ class Firebase:
 
     def get_posts(self):
         posts_ref = self.firestore.collection("posts")
-        posts = posts_ref.get()
+        posts = posts_ref.order_by("post_date", direction=firestore.Query.DESCENDING).get()
         return [post.to_dict() for post in posts]
 
     def get_post_by_id(self, post_id: str):
@@ -137,7 +137,7 @@ class Firebase:
         comments_ref = self.firestore.collection("comments")
         comments = comments_ref.where(
             filter=FieldFilter("post_id", "==", post_id)
-        ).get()
+        ).order_by("comment_date", direction=firestore.Query.DESCENDING).get()
         nested_comments = []
 
         for comment in comments:
