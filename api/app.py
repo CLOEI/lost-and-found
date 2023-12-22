@@ -355,6 +355,28 @@ def comment(id):
             )
 
 
+@app.route("/listing/<pid>/comment/<cid>/delete", methods=["POST"])
+def delete_comment(cid, pid):
+    unedited_post = fb.get_post_by_id(pid)
+    if request.method == "POST":
+        try:
+            token = request.cookies.get("token")
+            fb.delete_comment(cid, token)
+            return redirect("/listing/" + pid)
+        except ValueError as e:
+            return (
+                render_template(
+                    "listing.html",
+                    response={
+                        "status": "ERROR",
+                        "message": str(e),
+                        "post": unedited_post,
+                    },
+                ),
+                400,
+            )
+
+
 @app.route("/listing/<id>/comment/<comment_id>", methods=["POST"])
 def reply(id, comment_id):
     try:

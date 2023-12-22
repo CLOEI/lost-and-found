@@ -455,10 +455,10 @@ form .inputfield {
   .post-display .post-commentsystem {
     grid-column: 1 / span 2;
     grid-row: 4 / span 3;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    height: 26em;
   }
   .post-display .post-comments {
+    height: 20em;
     overflow-x: hidden;
     overflow-y: auto;
   }

@@ -85,9 +85,22 @@ get_current_uid() %}
     </h3>
     <div class="post-comments">
       {% for c in response.post.comments %}
-      <div class="comment-card flex-container flex-col">
-        <a href="/profile/{{c.uid}}">{{ c.display_name }}</a>
-        <p>{{ c.body }}</p>
+      <div class="comment-card flex-container flex-row">
+        <div class="flex-container flex-col">
+          <a href="/profile/{{c.uid}}" style="width: fit-content;">{{ c.display_name }}</a>
+          <p>{{ c.body }}</p>
+        </div>
+        <div
+          class="delete-button"
+          style="height: 100%"
+        >
+          <form action="{{ c.post_id }}/comment/{{ c.id }}/delete" method="post" class="flex-container flex-nogrow flex-col f-justify-end f-align-center">
+            <button type="submit" class="button" style="background: none; border: none;">
+              <i class="fa-solid fa-trash-can fa-lg" style="color: black"></i>
+            </button>
+          </form>
+          </a>
+        </div>
       </div>
       {% endfor %}
     </div>
