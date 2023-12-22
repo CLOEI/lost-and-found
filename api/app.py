@@ -36,11 +36,11 @@ def datetimeformat(value, format="%H:%M / %d-%m-%Y"):
 def utility_processor():
     def get_user_from_id(id):
         return fb.get_user_info(id)
+
     def get_current_uid():
         return fb.get_decoded_token(request.cookies.get("token"))["uid"]
 
     return dict(get_user_from_id=get_user_from_id, get_current_uid=get_current_uid)
-
 
 
 @app.route("/")
@@ -229,11 +229,45 @@ def post_edit(id):
                 ),
                 400,
             )
-    elif request.method == "DELETE":
+    elif request.method == "GET":
+        try:
+            post = fb.get_post_by_id(id)
+            user_uid = fb.get_decoded_token(request.cookies.get("token"))["uid"]
+            if post["post_owner_uid"] != user_uid:
+                return (
+                    render_template(
+                        "post.html",
+                        response={
+                            "status": "ERROR",
+                            "message": "Cannot edit a post that is not yours",
+                            "post": post,
+                        },
+                    ),
+                    400,
+                )
+            else:
+                return (
+                    render_template(
+                        "editpost.html", response={"status": "OK", "post": post}
+                    ),
+                    400,
+                )
+        except ValueError as e:
+            return (
+                render_template(
+                    "editpost.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
+
+
+@app.route("/listing/<id>/delete", methods=["GET", "POST"])
+def post_delete(id):
+    if request.method == "POST":
         try:
             token = request.cookies.get("token")
             fb.delete_listing(id, token)
-            return redirect("/listing")
+            return redirect("listing")
         except ValueError as e:
             return (
                 render_template(
@@ -242,37 +276,7 @@ def post_edit(id):
                 400,
             )
     elif request.method == "GET":
-        try:
-            post = fb.get_post_by_id(id)
-            return (
-                render_template(
-                    "editpost.html", response={"status": "OK", "post": post}
-                ),
-                400,
-            )
-        except ValueError as e:
-            return (
-                render_template(
-                    "editpost.html", response={"status": "ERROR", "message": str(e)}
-                ),
-                400,
-            )
-
-
-@app.route("/listing/<id>/delete", methods=["POST"])
-def post_delete(id):
-    if request.method == "POST":
-        try:
-            token = request.cookies.get("token")
-            fb.delete_listing(id, token)
-            return redirect("/listing")
-        except ValueError as e:
-            return (
-                render_template(
-                    "editpost.html", response={"status": "ERROR", "message": str(e)}
-                ),
-                400,
-            )
+        return redirect(url_for("listing"))
 
 
 @app.route("/profile", methods=["GET", "POST"])
