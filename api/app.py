@@ -306,6 +306,7 @@ def user(id):
 
 @app.route("/listing/<id>/comment", methods=["POST", "DELETE"])
 def comment(id):
+    unedited_post = fb.get_post_by_id(id)
     if request.method == "POST":
         try:
             body = request.form["comment"]
@@ -315,15 +316,24 @@ def comment(id):
         except BadRequestKeyError:
             return (
                 render_template(
-                    "listing.html",
-                    response={"status": "ERROR", "message": "All fields are required!"},
+                    "post.html",
+                    response={
+                        "status": "ERROR",
+                        "message": "All fields are required!",
+                        "post": unedited_post,
+                    },
                 ),
                 400,
             )
         except ValueError as e:
             return (
                 render_template(
-                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                    "listing.html",
+                    response={
+                        "status": "ERROR",
+                        "message": str(e),
+                        "post": unedited_post,
+                    },
                 ),
                 400,
             )
