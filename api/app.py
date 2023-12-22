@@ -5,6 +5,7 @@ from firebase_admin._auth_utils import EmailAlreadyExistsError
 from firebase_admin.exceptions import InvalidArgumentError
 from werkzeug.exceptions import BadRequestKeyError
 from dotenv import load_dotenv
+import time
 
 from Firebase import Firebase
 
@@ -24,6 +25,11 @@ def login_required(f):
             return f(*args, **kwargs)
 
     return decorated_function
+
+
+@app.template_filter("time")
+def datetimeformat(value, format="%H:%M / %d-%m-%Y"):
+    return time.strftime(format, time.localtime(value))
 
 
 @app.context_processor

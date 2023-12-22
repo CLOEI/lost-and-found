@@ -26,7 +26,14 @@
         {{ data.comments|length }} Comments
       </h3>
       {% for c in data.comments %}
-      <p>{{ c }}</p>
+      <div>
+        <p>{{c.body}}</p>
+        <p class="post-author" style="text-align: right">
+          {{ c.display_name }}<br />
+          {{ c.comment_date|time() }}
+        </p>
+      </div>
+
       {% endfor %}
     </div>
   </div>
