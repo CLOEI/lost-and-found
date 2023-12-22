@@ -39,12 +39,10 @@ def register():
             email = request.form["email"]
             display_name = request.form["username"]
             password = request.form["password"]
-            rememberme = request.form["rememberme"]
             data = fb.register_user(
                 email=email,
                 display_name=display_name,
                 password=password,
-                rememberme=rememberme,
             )
 
             resp = make_response(
@@ -168,12 +166,10 @@ def listing():
 
 @app.context_processor
 def utility_processor():
-    def get_username_from_id(id):
-        return fb.get_username_only(id)
     def get_user_from_id(id):
         return fb.get_user_info(id)
 
-    return dict(get_username_from_id=get_username_from_id, get_user_from_id=get_user_from_id)
+    return dict(get_user_from_id=get_user_from_id)
 
 
 @app.route("/listing/<id>")

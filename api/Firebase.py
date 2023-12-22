@@ -39,7 +39,7 @@ class Firebase:
         uid = str(uuid.uuid4())
         password = bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
         token = jwt.encode(
-            claims={"uid": uid},
+            claims={"uid": uid, "display_name": display_name},
             key=getenv("JWT_PRIVATE"),
             algorithm="HS256",
             headers={"exp": time.time() + 3600},
@@ -74,7 +74,7 @@ class Firebase:
             raise ValueError("Incorrect password")
 
         token = jwt.encode(
-            claims={"uid": user_dict["uid"]},
+            claims={"uid": user_dict["uid"], "display_name": user_dict["display_name"]},
             key=getenv("JWT_PRIVATE"),
             algorithm="HS256",
             headers={
@@ -96,7 +96,7 @@ class Firebase:
         users_ref = self.firestore.collection("users")
         user = users_ref.where(filter=FieldFilter("uid", "==", uid)).get()
 
-        if len(user) is 0:
+        if len(user) == 0:
             raise ValueError("User not found")
 
         user = user[0].to_dict()
@@ -110,7 +110,7 @@ class Firebase:
         users_ref = self.firestore.collection("users")
         user = users_ref.where(filter=FieldFilter("uid", "==", uid)).get()
 
-        if len(user) is 0:
+        if len(user) == 0:
             raise ValueError("User not found")
 
         dn = user[0].to_dict()["display_name"]
@@ -176,14 +176,15 @@ class Firebase:
 
         posts_ref = self.firestore.collection("posts")
         # from jwt decode it and get the uid
-        uid = self.get_uid_from_token(token)
+        decoded = self.get_decoded_token(token)
         post_id = str(uuid.uuid4())
         posts_ref.add(
             {
                 "id": post_id,
                 "title": title,
                 "body": body,
-                "post_owner": uid,
+                "post_owner_uid": decoded['uid'],
+                "post_owner_name": decoded['display_name'],
                 "post_date": time.time(),
                 "attachment_url": attachment_url,
             }
@@ -196,5 +197,5 @@ class Firebase:
         blob.make_public()
         return blob.public_url
 
-    def get_uid_from_token(self, token: str):
-        return jwt.decode(token, getenv("JWT_PRIVATE"), algorithms="HS256")["uid"]
+    def get_decoded_token(self, token: str):
+        return jwt.decode(token, getenv("JWT_PRIVATE"), algorithms="HS256")
