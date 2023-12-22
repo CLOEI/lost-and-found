@@ -165,7 +165,8 @@ button {
 
 .button {
   background: lightgrey;
-  border-radius: 0.2em;
+  border-radius: 6px;
+  border: none;
   height: 2em;
   width: fit-content;
   padding: 0.25em;
@@ -226,6 +227,14 @@ form .inputfield {
 
 .link {
   color: grey;
+}
+
+.content-index {
+  height: 80%;
+}
+
+.content {
+  height: 75%;
 }
 
 .card {
@@ -502,5 +511,14 @@ form .inputfield {
   .post-edit .userinput.imageupload .pic-image {
     grid-column: 1 / span 2;
     grid-row: 2 / span 4;
+  }
+}
+
+@media screen and (min-height: 720px) {
+  .content {
+    height: 80%;
+  }
+  .inputfield.resizable {
+    min-height: 5em;
   }
 }
