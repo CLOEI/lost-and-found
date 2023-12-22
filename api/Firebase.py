@@ -69,20 +69,14 @@ class Firebase:
 
         user_dict = user[0].to_dict()
 
-        if not bcrypt.checkpw(
-            password.encode("utf-8"), user_dict["password"].encode("utf-8")
-        ):
+        if not bcrypt.checkpw(password.encode("utf-8"), user_dict["password"].encode("utf-8")):
             raise ValueError("Incorrect password")
 
         token = jwt.encode(
             claims={"uid": user_dict["uid"], "display_name": user_dict["display_name"]},
             key=getenv("JWT_PRIVATE"),
             algorithm="HS256",
-            headers={
-                "exp": time.time() + (3600 * 24 * 30)
-                if rememberme
-                else time.time() + 3600
-            },
+            headers={"exp": time.time() + (3600 * 24 * 30) if rememberme else time.time() + 3600},
         )
         return {"token": token}
 
@@ -120,16 +114,12 @@ class Firebase:
 
     def get_posts(self):
         posts_ref = self.firestore.collection("posts")
-        posts = posts_ref.order_by(
-            "post_date", direction=firestore.Query.DESCENDING
-        ).get()
+        posts = posts_ref.order_by("post_date", direction=firestore.Query.DESCENDING).get()
         return [post.to_dict() for post in posts]
 
     def get_post_by_id(self, post_id: str):
         posts_ref = self.firestore.collection("posts")
-        post = (
-            posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0].to_dict()
-        )
+        post = posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0].to_dict()
         post["comments"] = self.get_comments_by_post_id(post_id)
         return post
 
@@ -140,11 +130,7 @@ class Firebase:
 
     def get_comments_by_post_id(self, post_id: str):
         comments_ref = self.firestore.collection("comments")
-        comments = (
-            comments_ref.where(filter=FieldFilter("post_id", "==", post_id))
-            .order_by("comment_date", direction=firestore.Query.DESCENDING)
-            .get()
-        )
+        comments = comments_ref.where(filter=FieldFilter("post_id", "==", post_id)).order_by("comment_date", direction=firestore.Query.DESCENDING).get()
         nested_comments = []
 
         for comment in comments:
@@ -162,9 +148,7 @@ class Firebase:
                     parent_comment_dict["comments"] = []
 
                 parent_comment_dict["comments"].append(comment_dict)
-                parent_comment.reference.update(
-                    {"comments": parent_comment_dict["comments"]}
-                )
+                parent_comment.reference.update({"comments": parent_comment_dict["comments"]})
             else:
                 nested_comments.append(comment_dict)
 
@@ -172,16 +156,10 @@ class Firebase:
 
     def get_comments_by_uid(self, uid: str):
         comments_ref = self.firestore.collection("comments")
-        comments = (
-            comments_ref.where("uid", "==", uid)
-            .order_by("comment_date", direction=firestore.Query.DESCENDING)
-            .get()
-        )
+        comments = comments_ref.where("uid", "==", uid).order_by("comment_date", direction=firestore.Query.DESCENDING).get()
         return [comment.to_dict() for comment in comments]
 
-    def create_listing(
-        self, title: str, body: str, attachment: FileStorage, token: str
-    ):
+    def create_listing(self, title: str, body: str, attachment: FileStorage, token: str):
         if not all([title, body]):
             raise BadRequestKeyError
 
@@ -226,11 +204,7 @@ class Firebase:
         if not all([title, body]):
             raise BadRequestKeyError
 
-        attachment_url = (
-            self.upload_file(attachment)
-            if type(attachment) is FileStorage
-            else attachment
-        )
+        attachment_url = self.upload_file(attachment) if type(attachment) is FileStorage else attachment
 
         posts_ref = self.firestore.collection("posts")
 
@@ -286,10 +260,10 @@ class Firebase:
     def delete_comment(self, comment_id: str, token: str):
         decoded = self.get_decoded_token(token)
         comments_ref = self.firestore.collection("comments")
-        comment = comments_ref.where(filter=FieldFilter("id", "==", comment_id)).get()
-        comment_dict = comment[0].to_dict()
+        comment = comments_ref.where(filter=FieldFilter("id", "==", comment_id)).get()[0]
+        comment_dict = comment.to_dict()
         if comment_dict["uid"] != decoded["uid"]:
             raise ValueError("You are not the owner of this comment")
 
-        comments_ref.where("id", "==", comment_id).delete()
+        comment.reference.delete()
         return True

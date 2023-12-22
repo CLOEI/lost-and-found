@@ -90,9 +90,7 @@ def register():
             )
         except InvalidArgumentError as e:
             return (
-                render_template(
-                    "register.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("register.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
         except ValueError as e:
@@ -126,16 +124,12 @@ def login():
             return resp
         except InvalidArgumentError as e:
             return (
-                render_template(
-                    "login.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("login.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
         except ValueError as e:
             return (
-                render_template(
-                    "login.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("login.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
     elif request.method == "GET":
@@ -153,9 +147,7 @@ def report():
         body = request.form["body"]
         attachment = request.files["attachment"]
         token = request.cookies.get("token")
-        postId = fb.create_listing(
-            title=title, body=body, attachment=attachment, token=token
-        )
+        postId = fb.create_listing(title=title, body=body, attachment=attachment, token=token)
         return redirect("/listing/" + postId)
     elif request.method == "GET":
         return render_template("report.html")
@@ -179,9 +171,7 @@ def listing():
         )
     except ValueError as e:
         return (
-            render_template(
-                "listing.html", response={"status": "ERROR", "message": str(e)}
-            ),
+            render_template("listing.html", response={"status": "ERROR", "message": str(e)}),
             400,
         )
 
@@ -201,18 +191,10 @@ def post_edit(id):
     if request.method == "POST":
         try:
             title = request.form["title"]
-            body = (
-                request.form["body"] if request.form["body"] else unedited_post["body"]
-            )
-            attachment = (
-                request.files["attachment"]
-                if request.files["attachment"]
-                else unedited_post["attachment_url"]
-            )
+            body = request.form["body"] if request.form["body"] else unedited_post["body"]
+            attachment = request.files["attachment"] if request.files["attachment"] else unedited_post["attachment_url"]
             token = request.cookies.get("token")
-            postId = fb.update_listing(
-                title=title, body=body, attachment=attachment, token=token, post_id=id
-            )
+            postId = fb.update_listing(title=title, body=body, attachment=attachment, token=token, post_id=id)
             return redirect("/listing/" + postId)
         except BadRequestKeyError:
             return (
@@ -224,9 +206,7 @@ def post_edit(id):
             )
         except ValueError as e:
             return (
-                render_template(
-                    "editpost.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("editpost.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
     elif request.method == "GET":
@@ -247,16 +227,12 @@ def post_edit(id):
                 )
             else:
                 return (
-                    render_template(
-                        "editpost.html", response={"status": "OK", "post": post}
-                    ),
+                    render_template("editpost.html", response={"status": "OK", "post": post}),
                     400,
                 )
         except ValueError as e:
             return (
-                render_template(
-                    "editpost.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("editpost.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
 
@@ -270,9 +246,7 @@ def post_delete(id):
             return redirect("listing")
         except ValueError as e:
             return (
-                render_template(
-                    "editpost.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("editpost.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
     elif request.method == "GET":
@@ -283,9 +257,7 @@ def post_delete(id):
 @login_required
 def profile():
     if request.method == "GET":
-        user = fb.get_user_info(
-            fb.get_decoded_token(request.cookies.get("token"))["uid"]
-        )
+        user = fb.get_user_info(fb.get_decoded_token(request.cookies.get("token"))["uid"])
         return render_template("account.html", data=user)
     elif request.method == "POST":
         if request.cookies.get("token"):
@@ -348,9 +320,7 @@ def comment(id):
             return redirect("/listing/" + id)
         except ValueError as e:
             return (
-                render_template(
-                    "listing.html", response={"status": "ERROR", "message": str(e)}
-                ),
+                render_template("listing.html", response={"status": "ERROR", "message": str(e)}),
                 400,
             )
 
@@ -394,9 +364,7 @@ def reply(id, comment_id):
         )
     except ValueError as e:
         return (
-            render_template(
-                "listing.html", response={"status": "ERROR", "message": str(e)}
-            ),
+            render_template("listing.html", response={"status": "ERROR", "message": str(e)}),
             400,
         )
 
