@@ -164,8 +164,9 @@ class Firebase:
         return nested_comments
 
     def get_comments_by_uid(self, uid: str):
+
         comments_ref = self.firestore.collection("comments")
-        comments = comments_ref.where("uid", "==", uid).get()
+        comments = comments_ref.where("uid", "==", uid).order_by("comment_date", direction=firestore.Query.DESCENDING).get()
         return [comment.to_dict() for comment in comments]
 
     def create_listing(
