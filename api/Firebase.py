@@ -212,7 +212,7 @@ class Firebase:
         if post_dict["post_owner_uid"] != decoded["uid"]:
             raise ValueError("You are not the owner of this post")
 
-        posts_ref.where("id", "==", post_id).delete()
+        post.reference.delete()
         return True
 
     def update_listing(
@@ -235,20 +235,18 @@ class Firebase:
         posts_ref = self.firestore.collection("posts")
 
         decoded = self.get_decoded_token(token)
-        posts = posts_ref.where(filter=FieldFilter("id", "==", post_id))
-        docs = posts.stream()
+        post = posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0]
 
-        for doc in docs:
-            doc.reference.update(
-                {
-                    "title": title,
-                    "body": body,
-                    "post_owner_uid": decoded["uid"],
-                    "post_owner_name": decoded["display_name"],
-                    "post_date": time.time(),
-                    "attachment_url": attachment_url,
-                }
-            )
+        post.reference.update(
+            {
+                "title": title,
+                "body": body,
+                "post_owner_uid": decoded["uid"],
+                "post_owner_name": decoded["display_name"],
+                "post_date": time.time(),
+                "attachment_url": attachment_url,
+            }
+        )
 
         return post_id
 
