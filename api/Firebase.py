@@ -190,6 +190,29 @@ class Firebase:
             }
         )
         return post_id
+    
+    def update_listing(
+        self, title: str, body: str, attachment: FileStorage, token: str, post_id: str
+    ):
+        if not all([title, body]):
+            raise BadRequestKeyError
+
+        attachment_url = self.upload_file(attachment) if attachment else None
+
+        posts_ref = self.firestore.collection("posts")
+
+        decoded = self.get_decoded_token(token)
+        posts_ref.where("id", '==', post_id).update(
+            {
+                "title": title,
+                "body": body,
+                "post_owner_uid": decoded['uid'],
+                "post_owner_name": decoded['display_name'],
+                "post_date": time.time(),
+                "attachment_url": attachment_url,
+            }
+        )
+        return post_id
 
     def upload_file(self, file: FileStorage):
         blob = self.storage.blob(file.filename)

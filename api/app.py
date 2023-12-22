@@ -139,29 +139,26 @@ def report():
 @app.route("/listing", methods=["GET", "PUT"])
 @login_required
 def listing():
-    if request.method == "PUT":
-        pass
-    elif request.method == "GET":
-        try:
-            posts = fb.get_posts()
+    try:
+        posts = fb.get_posts()
 
-            if len(posts) == 0:
-                raise ValueError("There are no posts")
+        if len(posts) == 0:
+            raise ValueError("There are no posts")
 
-            return (
-                render_template(
-                    "listing.html",
-                    response={"status": "OK", "posts": posts},
-                ),
-                400,
-            )
-        except ValueError as e:
-            return (
-                render_template(
-                    "listing.html", response={"status": "ERROR", "message": str(e)}
-                ),
-                400,
-            )
+        return (
+            render_template(
+                "listing.html",
+                response={"status": "OK", "posts": posts},
+            ),
+            400,
+        )
+    except ValueError as e:
+        return (
+            render_template(
+                "listing.html", response={"status": "ERROR", "message": str(e)}
+            ),
+            400,
+        )
 
 
 @app.context_processor
@@ -172,13 +169,39 @@ def utility_processor():
     return dict(get_user_from_id=get_user_from_id)
 
 
-@app.route("/listing/<id>")
+@app.route("/listing/<id>", methods=["GET", "PUT"])
 def post(id):
-    post = fb.get_post_by_id(id)
-    return (
-        render_template("post.html", response={"status": "OK", "post": post}),
-        400,
-    )
+    if request.method == "PUT":
+        try:
+            title = request.form["title"]
+            body = request.form["body"]
+            attachment = request.files["attachment"]
+            token = request.cookies.get("token")
+            postId = fb.update_listing(
+                title=title, body=body, attachment=attachment, token=token
+            )
+            return redirect('/listing/' + postId)
+        except BadRequestKeyError:
+            return (
+                render_template(
+                    "listing.html",
+                    response={"status": "ERROR", "message": "All fields are required!"},
+                ),
+                400,
+            )
+        except ValueError as e:
+            return (
+                render_template(
+                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
+    elif request.method == "GET":
+        post = fb.get_post_by_id(id)
+        return (
+            render_template("post.html", response={"status": "OK", "post": post}),
+            400,
+        )
 
 
 @app.route("/profile")
