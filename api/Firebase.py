@@ -218,7 +218,11 @@ class Firebase:
         posts_ref = self.firestore.collection("posts")
 
         decoded = self.get_decoded_token(token)
-        posts_ref.where(filter=FieldFilter("id", "==", post_id)).update(
+        posts = posts_ref.where(filter=FieldFilter("id", "==", post_id))
+        docs = posts.stream()
+
+        for doc in docs:
+            doc.reference.update(
             {
                 "title": title,
                 "body": body,
@@ -228,6 +232,7 @@ class Firebase:
                 "attachment_url": attachment_url,
             }
         )
+
         return post_id
 
     def upload_file(self, file: FileStorage):
