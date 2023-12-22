@@ -15,7 +15,8 @@
         <h4>{{post.title}}</h4>
         <p class="post-description">{{post.body}}</p>
         <p class="post-author" style="text-align: right">
-          posted by {{ post.post_owner_name }}
+          Posted by {{ post.post_owner_name }}<br />
+          {{ post.post_date|time() }}
         </p>
       </div>
     </a>
