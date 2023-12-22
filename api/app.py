@@ -239,6 +239,28 @@ def comment(id):
             400,
         )
 
+@app.route('/listing/<id>/comment/<comment_id>', methods=['POST'])
+def reply(id, comment_id):
+    try:
+        body = request.form['comment']
+        token = request.cookies.get('token')
+        fb.create_comment(body=body, token=token, post_id=id, reply_to=comment_id)
+        return redirect('/listing/' + id)
+    except BadRequestKeyError:
+        return (
+            render_template(
+                "listing.html",
+                response={"status": "ERROR", "message": "All fields are required!"},
+            ),
+            400,
+        )
+    except ValueError as e:
+        return (
+            render_template(
+                "listing.html", response={"status": "ERROR", "message": str(e)}
+            ),
+            400,
+        )
 
 if __name__ == "__main__":
     app.run()
