@@ -39,6 +39,10 @@ body a {
 }
 
 /* presudo-tailwind cuz it's so much nicer than css */
+.hidden {
+  visibility: hidden;
+}
+
 .flex-container {
   display: flex;
   flex: 1 1 auto;
@@ -256,6 +260,40 @@ form .inputfield {
   object-fit: cover;
 }
 
+.post-edit {
+  height: 95%;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.post-edit .userinput.title {
+  grid-column: 1;
+  grid-row: 1;
+}
+.post-edit .userinput.description {
+  grid-column: 1;
+  grid-row: 2;
+}
+.post-edit .userinput.imageupload {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+.post-edit .userinput.imageupload .pic-forminput {
+  grid-column: 1;
+  grid-row: 1;
+}
+.post-edit .userinput.imageupload .pic-image {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+.post-edit .userinput.submitbtn {
+  grid-column: 2;
+  grid-row: 3;
+}
+
 /* responsive layout */
 .responsive {
   width: 65vw;
@@ -267,6 +305,28 @@ form .inputfield {
 @media screen and (max-width: 1440px) {
   .grid-container {
     grid-template-columns: 32.3% 32.3% 32.3%;
+  }
+  .post-edit {
+    height: 95%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    overflow-y: auto;
+  }
+  .post-edit .userinput.title {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+  .post-edit .userinput.description {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+  }
+  .post-edit .userinput.imageupload {
+    grid-column: 1 / span 2;
+    grid-row: 3;
+  }
+  .post-edit .userinput.submitbtn {
+    grid-column: 2;
+    grid-row: 4;
   }
 }
 

@@ -158,7 +158,7 @@ def report():
         body = request.form["body"]
         attachment = request.files["attachment"]
         token = request.cookies.get("token")
-        fb.create_listing(
+        postId = fb.create_listing(
             title=title, body=body, attachment=attachment, token=token
         )
         return redirect("/listing/" + postId)
@@ -200,16 +200,16 @@ def post(id):
     )
 
 
-@app.route("/listing/<id>/edit", methods=["PUT", "DELETE"])
+@app.route("/listing/<id>/edit", methods=["GET", "POST", "DELETE"])
 def post_edit(id):
-    if request.method == "PUT":
+    if request.method == "POST":
         try:
             title = request.form["title"]
             body = request.form["body"]
             attachment = request.files["attachment"]
             token = request.cookies.get("token")
             postId = fb.update_listing(
-                title=title, body=body, attachment=attachment, token=token
+                title=title, body=body, attachment=attachment, token=token, post_id=id
             )
             return redirect("/listing/" + postId)
         except BadRequestKeyError:
@@ -239,6 +239,22 @@ def post_edit(id):
                 ),
                 400,
             )
+    elif request.method == "GET":
+        try:
+            post = fb.get_post_by_id(id)
+            return (
+                render_template(
+                    "editpost.html", response={"status": "OK", "post": post}
+                ),
+                400,
+            )
+        except ValueError as e:
+            return (
+                render_template(
+                    "editpost.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
 
 
 @app.route("/profile")
@@ -256,7 +272,7 @@ def user(id):
 
 @app.route("/listing/<id>/comment", methods=["POST", "DELETE"])
 def comment(id):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             body = request.form["comment"]
             token = request.cookies.get("token")
@@ -277,7 +293,7 @@ def comment(id):
                 ),
                 400,
             )
-    elif request.method == 'DELETE':
+    elif request.method == "DELETE":
         try:
             token = request.cookies.get("token")
             fb.delete_comment(id, token)

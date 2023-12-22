@@ -124,7 +124,9 @@ class Firebase:
 
     def get_post_by_id(self, post_id: str):
         posts_ref = self.firestore.collection("posts")
-        post = posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0].to_dict()
+        post = (
+            posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0].to_dict()
+        )
         post["comments"] = self.get_comments_by_post_id(post_id)
         return post
 
@@ -145,7 +147,7 @@ class Firebase:
 
             if comment_dict["reply_to"]:
                 parent_comment_id = comment_dict["reply_to"]
-                parent_comment = comments_ref.where("id", '==', parent_comment_id).get()
+                parent_comment = comments_ref.where("id", "==", parent_comment_id).get()
                 parent_comment_dict = parent_comment.to_dict()
 
                 if not parent_comment:
@@ -185,23 +187,23 @@ class Firebase:
                 "id": post_id,
                 "title": title,
                 "body": body,
-                "post_owner_uid": decoded['uid'],
-                "post_owner_name": decoded['display_name'],
+                "post_owner_uid": decoded["uid"],
+                "post_owner_name": decoded["display_name"],
                 "post_date": time.time(),
                 "attachment_url": attachment_url,
             }
         )
         return post_id
-    
+
     def delete_listing(self, post_id: str, token: str):
         decoded = self.get_decoded_token(token)
         posts_ref = self.firestore.collection("posts")
-        post = posts_ref.where("id", '==', post_id).get()
+        post = posts_ref.where("id", "==", post_id).get()
         post_dict = post.to_dict()
-        if post_dict['post_owner_uid'] != decoded['uid']:
+        if post_dict["post_owner_uid"] != decoded["uid"]:
             raise ValueError("You are not the owner of this post")
 
-        posts_ref.where("id", '==', post_id).delete()
+        posts_ref.where("id", "==", post_id).delete()
         return True
 
     def update_listing(
@@ -215,12 +217,12 @@ class Firebase:
         posts_ref = self.firestore.collection("posts")
 
         decoded = self.get_decoded_token(token)
-        posts_ref.where("id", '==', post_id).update(
+        posts_ref.where(filter=FieldFilter("id", "==", post_id)).update(
             {
                 "title": title,
                 "body": body,
-                "post_owner_uid": decoded['uid'],
-                "post_owner_name": decoded['display_name'],
+                "post_owner_uid": decoded["uid"],
+                "post_owner_name": decoded["display_name"],
                 "post_date": time.time(),
                 "attachment_url": attachment_url,
             }
@@ -235,7 +237,7 @@ class Firebase:
 
     def get_decoded_token(self, token: str):
         return jwt.decode(token, getenv("JWT_PRIVATE"), algorithms="HS256")
-    
+
     def create_comment(self, body: str, token: str, post_id: str, reply_to: str = None):
         if not all([body]):
             raise BadRequestKeyError
@@ -248,21 +250,21 @@ class Firebase:
                 "id": comment_id,
                 "body": body,
                 "post_id": post_id,
-                "uid": decoded['uid'],
-                "display_name": decoded['display_name'],
+                "uid": decoded["uid"],
+                "display_name": decoded["display_name"],
                 "comment_date": time.time(),
                 "reply_to": reply_to,
             }
         )
         return comment_id
-    
+
     def delete_comment(self, comment_id: str, token: str):
         decoded = self.get_decoded_token(token)
         comments_ref = self.firestore.collection("comments")
-        comment = comments_ref.where("id", '==', comment_id).get()
+        comment = comments_ref.where("id", "==", comment_id).get()
         comment_dict = comment.to_dict()
-        if comment_dict['uid'] != decoded['uid']:
+        if comment_dict["uid"] != decoded["uid"]:
             raise ValueError("You are not the owner of this comment")
 
-        comments_ref.where("id", '==', comment_id).delete()
+        comments_ref.where("id", "==", comment_id).delete()
         return True
