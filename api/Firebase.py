@@ -235,7 +235,11 @@ class Firebase:
         posts_ref = self.firestore.collection("posts")
 
         decoded = self.get_decoded_token(token)
+
         post = posts_ref.where(filter=FieldFilter("id", "==", post_id)).get()[0]
+
+        if post.to_dict()["post_owner_uid"] != decoded["uid"]:
+            raise ValueError("You are not the owner of this post")
 
         post.reference.update(
             {
