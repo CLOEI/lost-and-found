@@ -37,21 +37,7 @@ def utility_processor():
     def get_user_from_id(id):
         return fb.get_user_info(id)
 
-    def user_logout():
-        if request.cookies.get("token"):
-            resp = make_response(
-                redirect(url_for("index")),
-                {
-                    "status": "OK",
-                    "message": "Logged out",
-                },
-            )
-            resp.set_cookie("token", "")
-            return resp
-        else:
-            return make_response({"message": "Not logged in"})
-
-    return dict(get_user_from_id=get_user_from_id, user_logout=user_logout)
+    return dict(get_user_from_id=get_user_from_id)
 
 
 @app.route("/")
@@ -263,11 +249,27 @@ def post_edit(id):
             )
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    user = fb.get_user_info(fb.get_decoded_token(request.cookies.get("token"))["uid"])
-    return render_template("account.html", data=user)
+    if request.method == "GET":
+        user = fb.get_user_info(
+            fb.get_decoded_token(request.cookies.get("token"))["uid"]
+        )
+        return render_template("account.html", data=user)
+    elif request.method == "POST":
+        if request.cookies.get("token"):
+            resp = make_response(
+                redirect(url_for("index")),
+                {
+                    "status": "ALERT",
+                    "message": "Logged out",
+                },
+            )
+            resp.set_cookie("token", "")
+            return resp
+        else:
+            return make_response({"status": "ERROR", "message": "Not logged in"})
 
 
 @app.route("/profile/<id>")
