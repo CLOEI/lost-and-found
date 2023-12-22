@@ -136,7 +136,7 @@ def report():
         body = request.form["body"]
         attachment = request.files["attachment"]
         token = request.cookies.get("token")
-        postId = fb.create_listing(
+        fb.create_listing(
             title=title, body=body, attachment=attachment, token=token
         )
         return redirect(url_for("listing"))
@@ -237,28 +237,41 @@ def user(id):
     return render_template("profile.html", data=user)
 
 
-@app.route("/listing/<id>/comment", methods=["POST"])
+@app.route("/listing/<id>/comment", methods=["POST", "DELETE"])
 def comment(id):
-    try:
-        body = request.form["comment"]
-        token = request.cookies.get("token")
-        fb.create_comment(body=body, token=token, post_id=id)
-        return redirect("/listing/" + id)
-    except BadRequestKeyError:
-        return (
-            render_template(
-                "listing.html",
-                response={"status": "ERROR", "message": "All fields are required!"},
-            ),
-            400,
-        )
-    except ValueError as e:
-        return (
-            render_template(
-                "listing.html", response={"status": "ERROR", "message": str(e)}
-            ),
-            400,
-        )
+    if request.method == 'POST':
+        try:
+            body = request.form["comment"]
+            token = request.cookies.get("token")
+            fb.create_comment(body=body, token=token, post_id=id)
+            return redirect("/listing/" + id)
+        except BadRequestKeyError:
+            return (
+                render_template(
+                    "listing.html",
+                    response={"status": "ERROR", "message": "All fields are required!"},
+                ),
+                400,
+            )
+        except ValueError as e:
+            return (
+                render_template(
+                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
+    elif request.method == 'DELETE':
+        try:
+            token = request.cookies.get("token")
+            fb.delete_comment(id, token)
+            return redirect("/listing/" + id)
+        except ValueError as e:
+            return (
+                render_template(
+                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                ),
+                400,
+            )
 
 
 @app.route("/listing/<id>/comment/<comment_id>", methods=["POST"])

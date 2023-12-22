@@ -255,3 +255,14 @@ class Firebase:
             }
         )
         return comment_id
+    
+    def delete_comment(self, comment_id: str, token: str):
+        decoded = self.get_decoded_token(token)
+        comments_ref = self.firestore.collection("comments")
+        comment = comments_ref.where("id", '==', comment_id).get()
+        comment_dict = comment.to_dict()
+        if comment_dict['uid'] != decoded['uid']:
+            raise ValueError("You are not the owner of this comment")
+
+        comments_ref.where("id", '==', comment_id).delete()
+        return True
