@@ -26,6 +26,28 @@ def login_required(f):
     return decorated_function
 
 
+@app.context_processor
+def utility_processor():
+    def get_user_from_id(id):
+        return fb.get_user_info(id)
+
+    def user_logout():
+        if request.cookies.get("token"):
+            resp = make_response(
+                redirect(url_for("index")),
+                {
+                    "status": "OK",
+                    "message": "Logged out",
+                },
+            )
+            resp.set_cookie("token", "")
+            return resp
+        else:
+            return make_response({"message": "Not logged in"})
+
+    return dict(get_user_from_id=get_user_from_id, user_logout=user_logout)
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -139,7 +161,7 @@ def report():
         fb.create_listing(
             title=title, body=body, attachment=attachment, token=token
         )
-        return redirect(url_for("listing"))
+        return redirect("/listing/" + postId)
     elif request.method == "GET":
         return render_template("report.html")
 
@@ -169,15 +191,16 @@ def listing():
         )
 
 
-@app.context_processor
-def utility_processor():
-    def get_user_from_id(id):
-        return fb.get_user_info(id)
+@app.route("/listing/<id>")
+def post(id):
+    post = fb.get_post_by_id(id)
+    return (
+        render_template("post.html", response={"status": "OK", "post": post}),
+        400,
+    )
 
-    return dict(get_user_from_id=get_user_from_id)
 
-
-@app.route("/listing/<id>", methods=["GET", "PUT", "DELETE"])
+@app.route("/listing/<id>/edit", methods=["GET", "PUT", "DELETE"])
 def post(id):
     if request.method == "PUT":
         try:
@@ -192,7 +215,7 @@ def post(id):
         except BadRequestKeyError:
             return (
                 render_template(
-                    "listing.html",
+                    "editpost.html",
                     response={"status": "ERROR", "message": "All fields are required!"},
                 ),
                 400,
@@ -200,7 +223,7 @@ def post(id):
         except ValueError as e:
             return (
                 render_template(
-                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                    "editpost.html", response={"status": "ERROR", "message": str(e)}
                 ),
                 400,
             )
@@ -208,18 +231,18 @@ def post(id):
         try:
             token = request.cookies.get("token")
             fb.delete_listing(id, token)
-            return redirect('/listing')
+            return redirect("/listing")
         except ValueError as e:
             return (
                 render_template(
-                    "listing.html", response={"status": "ERROR", "message": str(e)}
+                    "editpost.html", response={"status": "ERROR", "message": str(e)}
                 ),
                 400,
             )
     elif request.method == "GET":
         post = fb.get_post_by_id(id)
         return (
-            render_template("post.html", response={"status": "OK", "post": post}),
+            render_template("editpost.html", response={"status": "OK", "post": post}),
             400,
         )
 
