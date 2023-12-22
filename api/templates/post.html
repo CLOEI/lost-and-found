@@ -14,7 +14,10 @@
   <div class="post-info" style="grid-column: 1 / span 1; grid-row: 2 / span 2">
     <p class="post-description">{{ response.post.body }}</p>
     <p class="post-author">
-      posted by {{ get_user_from_id(response.post.post_owner).display_name }}
+      posted by
+      <a href="/profile/{{response.post.post_owner}}">
+        {{ get_username_from_id(response.post.post_owner) }}
+      </a>
     </p>
   </div>
   <div class="post-image" style="grid-column: 2 / span 1; grid-row: 1 / span 3">

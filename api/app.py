@@ -180,9 +180,7 @@ def utility_processor():
 def post(id):
     post = fb.get_post_by_id(id)
     return (
-        render_template(
-            "post.html", response={"status": "OK", "message": "mangstap", "post": post}
-        ),
+        render_template("post.html", response={"status": "OK", "post": post}),
         400,
     )
 
@@ -192,13 +190,13 @@ def post(id):
 def profile():
     user = fb.get_user_info(fb.get_uid_from_token(request.cookies.get("token")))
     print(user)
-    return render_template("profile.html", data=user)
+    return render_template("account.html", data=user)
 
 
 @app.route("/profile/<id>")
 def user(id):
     user = fb.get_user_info(id)
-    return render_template("user.html", data=user)
+    return render_template("profile.html", data=user)
 
 
 if __name__ == "__main__":
