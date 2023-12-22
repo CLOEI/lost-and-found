@@ -90,8 +90,9 @@ get_current_uid() %}
           <a href="/profile/{{c.uid}}" style="width: fit-content;">{{ c.display_name }}</a>
           <p>{{ c.body }}</p>
         </div>
+        {% if c.uid == get_current_uid() %}
         <div
-          class="delete-button"
+          class="delete-button flex-container flex-nogrow flex-col f-justify-end f-align-center"
           style="height: 100%"
         >
           <form action="{{ c.post_id }}/comment/{{ c.id }}/delete" method="post" class="flex-container flex-nogrow flex-col f-justify-end f-align-center">
@@ -101,6 +102,7 @@ get_current_uid() %}
           </form>
           </a>
         </div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
