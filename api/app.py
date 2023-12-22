@@ -36,8 +36,11 @@ def datetimeformat(value, format="%H:%M / %d-%m-%Y"):
 def utility_processor():
     def get_user_from_id(id):
         return fb.get_user_info(id)
+    def get_current_uid():
+        return fb.get_decoded_token(request.cookies.get("token"))["uid"]
 
-    return dict(get_user_from_id=get_user_from_id)
+    return dict(get_user_from_id=get_user_from_id, get_current_uid=get_current_uid)
+
 
 
 @app.route("/")
