@@ -6,11 +6,20 @@
 <h2 class="subtitle">Profile</h2>
 {% endblock %} {% block contents %}
 <div class="flex-container flex-col f-justify-around" style="height: 65vh">
-  <div class="profile-info">
-    <h3 class="sectiontitle" style="padding: 0; font-size: 2em">
-      {{ data.display_name }}
-    </h3>
-    <p>{{ data.email }}</p>
+  <div class="profile-info flex-container flex-nogrow f-justify-between">
+    <div class="profile-meta">
+      <h3 class="sectiontitle" style="padding: 0; font-size: 2em">
+        {{ data.display_name }}
+      </h3>
+      <p>{{ data.email }}</p>
+    </div>
+    <div class="profile-pic" style="height: 2em; border-radius: 50%">
+      <img
+        src="{{ data.photo_url }}"
+        alt="{{ data.display_name }}"
+        style="height: 2em; aspect-ratio: 1"
+      />
+    </div>
   </div>
   <div class="profile-interactions flex-container flex-row flex-nogrow">
     <div class="profile-posts" style="width: 49%">

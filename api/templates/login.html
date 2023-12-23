@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% set has_back = True %} {% set return_destination =
 'index' %} {% block errormsg %} {% if response %} {% if response.status ==
 'ERROR' %}
-<p>{{ response.message }}</p>
+<p style="color: red">{{ response.message }}</p>
 {% endif %} {% endif %} {% endblock %} {% block subtitle %}
 <h2 class="subtitle">Login</h2>
 {% endblock %} {% block contents %}
